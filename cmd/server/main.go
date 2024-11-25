@@ -1,12 +1,13 @@
 package main
 
 import (
-	"fmt"
+	"context"
+	"log/slog"
 	"os"
 
 	"bootstrap/config"
+	"bootstrap/db/models"
 	"bootstrap/handlers"
-	"bootstrap/models"
 	"bootstrap/templates/pages"
 
 	_ "github.com/joho/godotenv/autoload"
@@ -36,13 +37,21 @@ func main() {
 		os.Exit(1)
 	}
 
+	db, err := database.Get()
+
 	if config.Vars.Env == "dev" {
 		// seed
-		err = models.Seed()
+		queries := models.New(db)
+		user, err := queries.CreateUser(context.Background(), models.CreateUserParams{
+			ID:   uuid.New("usr"),
+			Name: "Peter",
+		})
+
 		if err != nil {
-			l.Logger.Error(fmt.Sprintf("Can not seed db: %v", err))
-			os.Exit(1)
+			l.Logger.Error(err.Error())
 		}
+
+		l.Logger.Debug("user created", slog.String("id", user.ID), slog.String("name", user.Name))
 	}
 
 	// set up server

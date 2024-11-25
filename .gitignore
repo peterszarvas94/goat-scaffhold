@@ -1,5 +1,6 @@
 templates/**/*.templ_go
 .env
 sqlite.db
+dump.sql
 logs/
 db/

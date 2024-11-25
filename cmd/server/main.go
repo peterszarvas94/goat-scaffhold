@@ -1,12 +1,12 @@
 package main
 
 import (
-	"context"
-	"log/slog"
+	// "context"
+	// "log/slog"
 	"os"
 
 	"bootstrap/config"
-	"bootstrap/db/models"
+	// "bootstrap/db/models"
 	"bootstrap/handlers"
 	"bootstrap/templates/pages"
 
@@ -37,22 +37,21 @@ func main() {
 		os.Exit(1)
 	}
 
-	db, err := database.Get()
-
-	if config.Vars.Env == "dev" {
-		// seed
-		queries := models.New(db)
-		user, err := queries.CreateUser(context.Background(), models.CreateUserParams{
-			ID:   uuid.New("usr"),
-			Name: "Peter",
-		})
-
-		if err != nil {
-			l.Logger.Error(err.Error())
-		}
-
-		l.Logger.Debug("user created", slog.String("id", user.ID), slog.String("name", user.Name))
-	}
+	// db, err := database.Get()
+	//
+	// if config.Vars.Env == "dev" {
+	// 	queries := models.New(db)
+	// 	user, err := queries.CreateUser(context.Background(), models.CreateUserParams{
+	// 		ID:   uuid.New("usr"),
+	// 		Name: "Peter",
+	// 	})
+	//
+	// 	if err != nil {
+	// 		l.Logger.Error(err.Error())
+	// 	}
+	//
+	// 	l.Logger.Debug("user created", slog.String("id", user.ID), slog.String("name", user.Name))
+	// }
 
 	// set up server
 	url := server.NewLocalHostUrl(config.Port)

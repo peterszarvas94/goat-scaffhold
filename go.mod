@@ -13,5 +13,3 @@ require (
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/mattn/go-sqlite3 v1.14.24 // indirect
 )
-
-replace github.com/peterszarvas04/goat => ../goat

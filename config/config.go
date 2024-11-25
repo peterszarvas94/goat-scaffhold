@@ -5,6 +5,7 @@ import (
 )
 
 var (
+	AppName  = "bootstrap"
 	Port     = "9999"
 	LogLevel = slog.LevelDebug
 )

@@ -12,7 +12,7 @@ import (
 const createSession = `-- name: CreateSession :one
 INSERT INTO session (id, user_id)
 VALUES (?, ?)
-RETURNING id, user_id
+RETURNING id, user_id, created_at, updated_at
 `
 
 type CreateSessionParams struct {
@@ -23,7 +23,12 @@ type CreateSessionParams struct {
 func (q *Queries) CreateSession(ctx context.Context, arg CreateSessionParams) (Session, error) {
 	row := q.db.QueryRowContext(ctx, createSession, arg.ID, arg.UserID)
 	var i Session
-	err := row.Scan(&i.ID, &i.UserID)
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
 	return i, err
 }
 
@@ -38,7 +43,7 @@ func (q *Queries) DeleteSession(ctx context.Context, id string) error {
 }
 
 const getSessionByID = `-- name: GetSessionByID :one
-SELECT id, user_id
+SELECT id, user_id, created_at, updated_at
 FROM session
 WHERE id = ?
 `
@@ -46,12 +51,17 @@ WHERE id = ?
 func (q *Queries) GetSessionByID(ctx context.Context, id string) (Session, error) {
 	row := q.db.QueryRowContext(ctx, getSessionByID, id)
 	var i Session
-	err := row.Scan(&i.ID, &i.UserID)
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
 	return i, err
 }
 
 const listSessions = `-- name: ListSessions :many
-SELECT id, user_id
+SELECT id, user_id, created_at, updated_at
 FROM session
 ORDER BY name
 `
@@ -65,7 +75,12 @@ func (q *Queries) ListSessions(ctx context.Context) ([]Session, error) {
 	var items []Session
 	for rows.Next() {
 		var i Session
-		if err := rows.Scan(&i.ID, &i.UserID); err != nil {
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -83,7 +98,7 @@ const updateSession = `-- name: UpdateSession :one
 UPDATE session
 SET user_id = ?
 WHERE id = ?
-RETURNING id, user_id
+RETURNING id, user_id, created_at, updated_at
 `
 
 type UpdateSessionParams struct {
@@ -94,6 +109,11 @@ type UpdateSessionParams struct {
 func (q *Queries) UpdateSession(ctx context.Context, arg UpdateSessionParams) (Session, error) {
 	row := q.db.QueryRowContext(ctx, updateSession, arg.UserID, arg.ID)
 	var i Session
-	err := row.Scan(&i.ID, &i.UserID)
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
 	return i, err
 }

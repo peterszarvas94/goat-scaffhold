@@ -4,14 +4,22 @@
 
 package models
 
+import (
+	"database/sql"
+)
+
 type Session struct {
-	ID     string
-	UserID string
+	ID        string
+	UserID    string
+	CreatedAt sql.NullTime
+	UpdatedAt sql.NullTime
 }
 
 type User struct {
-	ID       string
-	Name     string
-	Email    string
-	Password string
+	ID        string
+	Name      string
+	Email     string
+	Password  string
+	CreatedAt sql.NullTime
+	UpdatedAt sql.NullTime
 }

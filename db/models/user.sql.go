@@ -12,7 +12,7 @@ import (
 const createUser = `-- name: CreateUser :one
 INSERT INTO user (id, name, email, password)
 VALUES (?, ?, ?, ?)
-RETURNING (id, name, email)
+RETURNING id, name, email
 `
 
 type CreateUserParams struct {
@@ -22,16 +22,22 @@ type CreateUserParams struct {
 	Password string
 }
 
-func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (interface{}, error) {
+type CreateUserRow struct {
+	ID    string
+	Name  string
+	Email string
+}
+
+func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (CreateUserRow, error) {
 	row := q.db.QueryRowContext(ctx, createUser,
 		arg.ID,
 		arg.Name,
 		arg.Email,
 		arg.Password,
 	)
-	var column_1 interface{}
-	err := row.Scan(&column_1)
-	return column_1, err
+	var i CreateUserRow
+	err := row.Scan(&i.ID, &i.Name, &i.Email)
+	return i, err
 }
 
 const deleteUser = `-- name: DeleteUser :exec
@@ -45,7 +51,7 @@ func (q *Queries) DeleteUser(ctx context.Context, id string) error {
 }
 
 const getUserByID = `-- name: GetUserByID :one
-SELECT id, name, email, password
+SELECT id, name, email, password, created_at, updated_at
 FROM user
 WHERE id = ?
 `
@@ -58,12 +64,14 @@ func (q *Queries) GetUserByID(ctx context.Context, id string) (User, error) {
 		&i.Name,
 		&i.Email,
 		&i.Password,
+		&i.CreatedAt,
+		&i.UpdatedAt,
 	)
 	return i, err
 }
 
 const listUser = `-- name: ListUser :many
-SELECT id, name, email, password
+SELECT id, name, email, password, created_at, updated_at
 FROM user
 ORDER BY name
 `
@@ -82,6 +90,8 @@ func (q *Queries) ListUser(ctx context.Context) ([]User, error) {
 			&i.Name,
 			&i.Email,
 			&i.Password,
+			&i.CreatedAt,
+			&i.UpdatedAt,
 		); err != nil {
 			return nil, err
 		}
@@ -96,11 +106,34 @@ func (q *Queries) ListUser(ctx context.Context) ([]User, error) {
 	return items, nil
 }
 
+const login = `-- name: Login :one
+SELECT email, name
+FROM user
+WHERE email = ? AND password = ?
+`
+
+type LoginParams struct {
+	Email    string
+	Password string
+}
+
+type LoginRow struct {
+	Email string
+	Name  string
+}
+
+func (q *Queries) Login(ctx context.Context, arg LoginParams) (LoginRow, error) {
+	row := q.db.QueryRowContext(ctx, login, arg.Email, arg.Password)
+	var i LoginRow
+	err := row.Scan(&i.Email, &i.Name)
+	return i, err
+}
+
 const updateUser = `-- name: UpdateUser :one
 UPDATE user
 SET name = ?, email = ?, password = ?
 WHERE id = ?
-RETURNING (id, name, email)
+RETURNING id, name, email
 `
 
 type UpdateUserParams struct {
@@ -110,14 +143,20 @@ type UpdateUserParams struct {
 	ID       string
 }
 
-func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (interface{}, error) {
+type UpdateUserRow struct {
+	ID    string
+	Name  string
+	Email string
+}
+
+func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (UpdateUserRow, error) {
 	row := q.db.QueryRowContext(ctx, updateUser,
 		arg.Name,
 		arg.Email,
 		arg.Password,
 		arg.ID,
 	)
-	var column_1 interface{}
-	err := row.Scan(&column_1)
-	return column_1, err
+	var i UpdateUserRow
+	err := row.Scan(&i.ID, &i.Name, &i.Email)
+	return i, err
 }

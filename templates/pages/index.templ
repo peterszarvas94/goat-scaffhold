@@ -1,31 +1,50 @@
 package pages
 
 import (
-	p "bootstrap/templates/partial"
+	"fmt"
+	"bootstrap/db/models"
+	"bootstrap/config"
+	"bootstrap/templates/components"
+	"bootstrap/templates/partial"
 )
 
-type indexT struct{}
-
-templ (i *indexT) Full(l []string) {
-	@index("", l)
+type IndexProps struct {
+	User    *models.User
+	Partial string
 }
 
-templ (i *indexT) Partial(part string, l []string) {
-	@index(part, l)
+templ Index(props IndexProps) {
+	@components.Head()
+	@partial.Full(props.Partial) {
+		<h1>{ fmt.Sprintf("Welcome to %s", config.AppName) }</h1>
+	}
+	@partial.Partial(props.Partial, "userinfo") {
+		<div id="userinfo">
+			if props.User != nil {
+				<div>logged in as:</div>
+				<div>{ fmt.Sprintf("%s (%s)", props.User.Name, props.User.Email) }</div>
+			} else {
+				<div>You are not logged in</div>
+				<h2>Log in</h2>
+				<form hx-post="/login/" hx-target="#userinfo">
+					<label for="email">Email</label>
+					<input name="email" type="email"/>
+					<label for="password">Password</label>
+					<input name="password" type="password"/>
+					<button type="submit">Submit</button>
+				</form>
+				<hr/>
+				<h2>Register</h2>
+				<form hx-post="/register/" hx-target="#userinfo">
+					<label for="name">Name</label>
+					<input name="name"/>
+					<label for="email">Email</label>
+					<input name="email" type="email"/>
+					<label for="password">Password</label>
+					<input name="password" type="password"/>
+					<button type="submit">Submit</button>
+				</form>
+			}
+		</div>
+	}
 }
-
-templ index(part string, list []string) {
-	@p.Full(part) {
-		<div>top</div>
-	}
-	@p.Partial(part, "test") {
-		<div>partial test</div>
-	}
-	for _, elem := range list {
-		@p.Partial(part, elem) {
-			<div>{ elem }</div>
-		}
-	}
-}
-
-var Index indexT

@@ -3,4 +3,3 @@ templates/**/*.templ_go
 sqlite.db
 dump.sql
 logs/
-db/

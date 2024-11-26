@@ -1,4 +1,4 @@
-templates/**/*.templ_go
+templates/**/*_templ.go
 .env
 sqlite.db
 dump.sql

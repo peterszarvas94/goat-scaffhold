@@ -2,10 +2,11 @@ package handlers
 
 import (
 	"context"
+	"log/slog"
 	"net/http"
 
 	"bootstrap/db/models"
-	"bootstrap/templates/pages"
+	"bootstrap/templates/components"
 
 	"github.com/peterszarvas94/goat/database"
 	l "github.com/peterszarvas94/goat/logger"
@@ -15,7 +16,7 @@ import (
 
 func Register(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
-		server.TemplShow(pages.ServerError(), w, r, http.StatusInternalServerError)
+		ServerError(err, w, r)
 		return
 	}
 
@@ -25,7 +26,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 	db, err := database.Get()
 	if err != nil {
-		server.TemplShow(pages.ServerError(), w, r, http.StatusInternalServerError)
+		ServerError(err, w, r)
 		return
 	}
 
@@ -38,15 +39,17 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if err != nil {
-		l.Logger.Error(err.Error())
+		ServerError(err, w, r)
 		return
 	}
 
-	server.TemplShow(pages.Index(pages.IndexProps{
-		User: &models.User{
-			Name:  user.Name,
-			Email: user.Email,
-		},
-		Partial: "userinfo",
-	}), w, r, http.StatusOK)
+	l.Logger.Debug("Registered", slog.String("user_id", user.ID))
+
+	LoginWidget(w, r)
+}
+
+func RegisterWidget(w http.ResponseWriter, r *http.Request) {
+	l.Logger.Debug("Register widget requested")
+
+	server.TemplShow(components.Register(), w, r, http.StatusOK)
 }

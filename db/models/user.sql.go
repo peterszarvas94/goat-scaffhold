@@ -107,7 +107,7 @@ func (q *Queries) ListUser(ctx context.Context) ([]User, error) {
 }
 
 const login = `-- name: Login :one
-SELECT email, name
+SELECT id, email, name
 FROM user
 WHERE email = ? AND password = ?
 `
@@ -118,6 +118,7 @@ type LoginParams struct {
 }
 
 type LoginRow struct {
+	ID    string
 	Email string
 	Name  string
 }
@@ -125,7 +126,7 @@ type LoginRow struct {
 func (q *Queries) Login(ctx context.Context, arg LoginParams) (LoginRow, error) {
 	row := q.db.QueryRowContext(ctx, login, arg.Email, arg.Password)
 	var i LoginRow
-	err := row.Scan(&i.Email, &i.Name)
+	err := row.Scan(&i.ID, &i.Email, &i.Name)
 	return i, err
 }
 

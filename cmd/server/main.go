@@ -40,12 +40,17 @@ func main() {
 	mux := server.NewMux(url)
 	mux.TemplGet("/", pages.NotFound())
 	mux.TemplGet("/{$}", pages.Index(pages.IndexProps{}))
-	mux.Post("/register/{$}", handlers.Register)
-	mux.Post("/login/{$}", handlers.Login)
+
+	mux.Get("/register", handlers.RegisterWidget)
+	mux.Post("/register", handlers.Register)
+
+	mux.Get("/login", handlers.LoginWidget)
+	mux.Post("/login", handlers.Login)
+
+	mux.Post("/logout", handlers.Logout)
 
 	serverId := uuid.New("srv")
 	s := server.NewServer(mux)
 
 	s.Serve(url, serverId)
-
 }

@@ -1,0 +1,14 @@
+package components
+
+import (
+	"bootstrap/db/models"
+	"fmt"
+)
+
+templ Userinfo(user *models.User) {
+	<section id="userinfo">
+		<div>logged in as:</div>
+		<div>{ fmt.Sprintf("%s (%s)", user.Name, user.Email) }</div>
+		<button hx-post="/logout" hx-target="#userinfo" hx-swap="outerHTML">Logout</button>
+	</section>
+}

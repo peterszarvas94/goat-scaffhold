@@ -2,10 +2,11 @@ package handlers
 
 import (
 	"context"
+	"log/slog"
 	"net/http"
 
 	"bootstrap/db/models"
-	"bootstrap/templates/pages"
+	"bootstrap/templates/components"
 
 	"github.com/peterszarvas94/goat/database"
 	l "github.com/peterszarvas94/goat/logger"
@@ -14,7 +15,7 @@ import (
 
 func Login(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
-		server.TemplShow(pages.ServerError(), w, r, http.StatusInternalServerError)
+		ServerError(err, w, r)
 		return
 	}
 
@@ -23,7 +24,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	db, err := database.Get()
 	if err != nil {
-		server.TemplShow(pages.ServerError(), w, r, http.StatusInternalServerError)
+		ServerError(err, w, r)
 		return
 	}
 
@@ -34,15 +35,22 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if err != nil {
-		l.Logger.Error(err.Error())
+		ServerError(err, w, r)
 		return
 	}
 
-	server.TemplShow(pages.Index(pages.IndexProps{
-		User: &models.User{
-			Name:  user.Name,
-			Email: user.Email,
-		},
-		Partial: "userinfo",
+	l.Logger.Debug("Logged in", slog.String("user_id", user.ID))
+
+	l.Logger.Debug("Userinfo widget requested", slog.String("user_id", user.ID))
+
+	server.TemplShow(components.Userinfo(&models.User{
+		Name:  user.Name,
+		Email: user.Email,
 	}), w, r, http.StatusOK)
+}
+
+func LoginWidget(w http.ResponseWriter, r *http.Request) {
+	l.Logger.Debug("Login widget requested")
+
+	server.TemplShow(components.Login(), w, r, http.StatusOK)
 }

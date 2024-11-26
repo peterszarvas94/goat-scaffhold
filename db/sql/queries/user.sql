@@ -14,7 +14,7 @@ VALUES (?, ?, ?, ?)
 RETURNING id, name, email;
 
 -- name: Login :one
-SELECT email, name
+SELECT id, email, name
 FROM user
 WHERE email = ? AND password = ?;
 

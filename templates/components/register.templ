@@ -1,0 +1,25 @@
+package components 
+
+templ Register() {
+	<section id="register">
+		<h2>Register</h2>
+		// register form
+		<form hx-post="/register" hx-target="#register" hx-swap="outerHTML">
+			<label for="name" id="name">Name</label>
+			<input name="name"/>
+			<label for="email">Email</label>
+			<input name="email" type="email" id="email"/>
+			<label for="password">Password</label>
+			<input name="password" type="password" id="password"/>
+			<button type="submit">Submit</button>
+		</form>
+		// get login widget
+		<button
+			hx-get="/login"
+			hx-target="#register"
+			hx-swap="outerHTML"
+		>
+			Login instead
+		</button>
+	</section>
+}

@@ -2,7 +2,9 @@ package partial
 
 templ Partial(partialName, componentName string) {
 	if partialName == "" || partialName  == componentName {
-		{ children... }
+		<div id="componentName">
+			{ children... }
+		</div>
 	}
 }
 

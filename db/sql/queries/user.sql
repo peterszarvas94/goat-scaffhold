@@ -3,6 +3,11 @@ SELECT *
 FROM user
 WHERE id = ?;
 
+-- name: GetUserByEmail :one
+SELECT *
+FROM user
+WHERE email = ?;
+
 -- name: ListUser :many
 SELECT *
 FROM user

@@ -1,11 +1,15 @@
 package components
 
 import (
-	"bootstrap/db/models"
 	"fmt"
 )
 
-templ Userinfo(user *models.User) {
+type UserinfoProps struct {
+	Name  string
+	Email string
+}
+
+templ Userinfo(user UserinfoProps) {
 	<section id="userinfo">
 		<div>logged in as:</div>
 		<div>{ fmt.Sprintf("%s (%s)", user.Name, user.Email) }</div>

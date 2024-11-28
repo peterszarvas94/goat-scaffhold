@@ -39,7 +39,7 @@ func main() {
 
 	mux := server.NewMux(url)
 	mux.TemplGet("/", pages.NotFound())
-	mux.TemplGet("/{$}", pages.Index(pages.IndexProps{}))
+	mux.Get("/{$}", handlers.Index)
 
 	mux.Get("/register", handlers.RegisterWidget)
 	mux.Post("/register", handlers.Register)

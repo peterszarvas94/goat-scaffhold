@@ -1,0 +1,14 @@
+package components
+
+type EmailInputProps struct {
+	Value string
+	Error string
+}
+
+templ EmailInput(props EmailInputProps) {
+	<label for="email">Email</label>
+	<input name="email" type="email" id="email" value={ props.Value }/>
+	if props.Error != "" {
+		<p>{ props.Error } </p>
+	}
+}

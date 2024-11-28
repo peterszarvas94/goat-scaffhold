@@ -1,16 +1,40 @@
 package components 
 
-templ Register() {
+type RegisterProps struct {
+	NameValue     string
+	NameError     string
+	EmailValue    string
+	EmailError    string
+	PasswordValue string
+	PasswordError string
+}
+
+templ Register(props RegisterProps) {
+	<style type="text/css">
+		#register {
+			form {
+				display: flex;
+				flex-direction: column;
+				gap: 1rem;
+			}
+		}
+	</style>
 	<section id="register">
 		<h2>Register</h2>
 		// register form
-		<form hx-post="/register" hx-target="#register" hx-swap="outerHTML">
-			<label for="name" id="name">Name</label>
-			<input name="name"/>
-			<label for="email">Email</label>
-			<input name="email" type="email" id="email"/>
-			<label for="password">Password</label>
-			<input name="password" type="password" id="password"/>
+		<form hx-post="/register" hx-target="#register" hx-target-error="#register" hx-swap="outerHTML">
+			@NameInput(NameInputProps{
+				Value: props.NameValue,
+				Error: props.NameError,
+			})
+			@EmailInput(EmailInputProps{
+				Value: props.EmailValue,
+				Error: props.EmailError,
+			})
+			@PasswordInput(PasswordInputProps{
+				Value: props.PasswordValue,
+				Error: props.PasswordError,
+			})
 			<button type="submit">Submit</button>
 		</form>
 		// get login widget

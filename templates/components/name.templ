@@ -1,0 +1,14 @@
+package components
+
+type NameInputProps struct {
+	Value string
+	Error string
+}
+
+templ NameInput(props NameInputProps) {
+	<label for="name">Name</label>
+	<input name="name" type="text" id="name" value={ props.Value }/>
+	if props.Error != "" {
+		<p>{ props.Error } </p>
+	}
+}

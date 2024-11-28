@@ -31,6 +31,30 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	queries := models.New(db)
+
+	existing, _ := queries.GetUserByEmail(context.Background(), email)
+	var nameError string
+	var emailError string
+
+	if existing.Name == name {
+		nameError = "Name already in use"
+	}
+
+	if existing.Email == email {
+		emailError = "Email already in use"
+	}
+
+	if nameError != "" || emailError != "" {
+		server.TemplShow(components.Register(components.RegisterProps{
+			NameValue:     name,
+			NameError:     nameError,
+			EmailValue:    email,
+			EmailError:    emailError,
+			PasswordValue: password,
+		}), w, r, http.StatusConflict)
+		return
+	}
+
 	user, err := queries.CreateUser(context.Background(), models.CreateUserParams{
 		ID:       uuid.New("usr"),
 		Name:     name,
@@ -45,11 +69,13 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 	l.Logger.Debug("Registered", slog.String("user_id", user.ID))
 
-	LoginWidget(w, r)
+	server.TemplShow(components.Login(components.LoginProps{
+		EmailValue: user.Email,
+	}), w, r, http.StatusOK)
 }
 
 func RegisterWidget(w http.ResponseWriter, r *http.Request) {
 	l.Logger.Debug("Register widget requested")
 
-	server.TemplShow(components.Register(), w, r, http.StatusOK)
+	server.TemplShow(components.Register(components.RegisterProps{}), w, r, http.StatusOK)
 }

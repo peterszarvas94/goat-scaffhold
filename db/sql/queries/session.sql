@@ -9,13 +9,13 @@ FROM session
 ORDER BY name;
 
 -- name: CreateSession :one
-INSERT INTO session (id, user_id)
-VALUES (?, ?)
+INSERT INTO session (id, user_id, valid_until)
+VALUES (?, ?, ?)
 RETURNING *;
 
 -- name: UpdateSession :one
 UPDATE session
-SET user_id = ?
+SET valid_until = ?
 WHERE id = ?
 RETURNING *;
 

@@ -7,25 +7,28 @@ package models
 
 import (
 	"context"
+	"time"
 )
 
 const createSession = `-- name: CreateSession :one
-INSERT INTO session (id, user_id)
-VALUES (?, ?)
-RETURNING id, user_id, created_at, updated_at
+INSERT INTO session (id, user_id, valid_until)
+VALUES (?, ?, ?)
+RETURNING id, user_id, valid_until, created_at, updated_at
 `
 
 type CreateSessionParams struct {
-	ID     string
-	UserID string
+	ID         string
+	UserID     string
+	ValidUntil time.Time
 }
 
 func (q *Queries) CreateSession(ctx context.Context, arg CreateSessionParams) (Session, error) {
-	row := q.db.QueryRowContext(ctx, createSession, arg.ID, arg.UserID)
+	row := q.db.QueryRowContext(ctx, createSession, arg.ID, arg.UserID, arg.ValidUntil)
 	var i Session
 	err := row.Scan(
 		&i.ID,
 		&i.UserID,
+		&i.ValidUntil,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -43,7 +46,7 @@ func (q *Queries) DeleteSession(ctx context.Context, id string) error {
 }
 
 const getSessionByID = `-- name: GetSessionByID :one
-SELECT id, user_id, created_at, updated_at
+SELECT id, user_id, valid_until, created_at, updated_at
 FROM session
 WHERE id = ?
 `
@@ -54,6 +57,7 @@ func (q *Queries) GetSessionByID(ctx context.Context, id string) (Session, error
 	err := row.Scan(
 		&i.ID,
 		&i.UserID,
+		&i.ValidUntil,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -61,7 +65,7 @@ func (q *Queries) GetSessionByID(ctx context.Context, id string) (Session, error
 }
 
 const listSessions = `-- name: ListSessions :many
-SELECT id, user_id, created_at, updated_at
+SELECT id, user_id, valid_until, created_at, updated_at
 FROM session
 ORDER BY name
 `
@@ -78,6 +82,7 @@ func (q *Queries) ListSessions(ctx context.Context) ([]Session, error) {
 		if err := rows.Scan(
 			&i.ID,
 			&i.UserID,
+			&i.ValidUntil,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {
@@ -96,22 +101,23 @@ func (q *Queries) ListSessions(ctx context.Context) ([]Session, error) {
 
 const updateSession = `-- name: UpdateSession :one
 UPDATE session
-SET user_id = ?
+SET valid_until = ?
 WHERE id = ?
-RETURNING id, user_id, created_at, updated_at
+RETURNING id, user_id, valid_until, created_at, updated_at
 `
 
 type UpdateSessionParams struct {
-	UserID string
-	ID     string
+	ValidUntil time.Time
+	ID         string
 }
 
 func (q *Queries) UpdateSession(ctx context.Context, arg UpdateSessionParams) (Session, error) {
-	row := q.db.QueryRowContext(ctx, updateSession, arg.UserID, arg.ID)
+	row := q.db.QueryRowContext(ctx, updateSession, arg.ValidUntil, arg.ID)
 	var i Session
 	err := row.Scan(
 		&i.ID,
 		&i.UserID,
+		&i.ValidUntil,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)

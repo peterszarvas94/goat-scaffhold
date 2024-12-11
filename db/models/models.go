@@ -6,13 +6,15 @@ package models
 
 import (
 	"database/sql"
+	"time"
 )
 
 type Session struct {
-	ID        string
-	UserID    string
-	CreatedAt sql.NullTime
-	UpdatedAt sql.NullTime
+	ID         string
+	UserID     string
+	ValidUntil time.Time
+	CreatedAt  sql.NullTime
+	UpdatedAt  sql.NullTime
 }
 
 type User struct {

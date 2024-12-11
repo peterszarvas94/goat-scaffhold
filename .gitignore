@@ -4,3 +4,4 @@ sqlite.db
 dump.sql
 logs/
 main
+db/migrations/

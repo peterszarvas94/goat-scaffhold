@@ -4,6 +4,7 @@ import (
 	"context"
 	"log/slog"
 	"net/http"
+	"time"
 
 	"scaffhold/config"
 	"scaffhold/db/models"
@@ -50,8 +51,9 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	sessionId := uuid.New("ses")
 	session, err := queries.CreateSession(context.Background(), models.CreateSessionParams{
-		ID:     sessionId,
-		UserID: user.ID,
+		ID:         sessionId,
+		UserID:     user.ID,
+		ValidUntil: time.Now().Add(24 * time.Hour),
 	})
 
 	if err != nil {

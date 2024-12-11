@@ -1,12 +1,12 @@
 package handlers
 
 import (
-	"bootstrap/db/models"
-	"bootstrap/templates/components"
-	"bootstrap/templates/pages"
 	"context"
 	"log/slog"
 	"net/http"
+	"scaffhold/db/models"
+	"scaffhold/templates/components"
+	"scaffhold/templates/pages"
 
 	"github.com/peterszarvas94/goat/database"
 	l "github.com/peterszarvas94/goat/logger"

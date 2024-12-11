@@ -5,9 +5,9 @@ import (
 	"log/slog"
 	"net/http"
 
-	"bootstrap/config"
-	"bootstrap/db/models"
-	"bootstrap/templates/components"
+	"scaffhold/config"
+	"scaffhold/db/models"
+	"scaffhold/templates/components"
 
 	"github.com/peterszarvas94/goat/database"
 	l "github.com/peterszarvas94/goat/logger"

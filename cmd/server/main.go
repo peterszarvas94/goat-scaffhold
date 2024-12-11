@@ -3,9 +3,9 @@ package main
 import (
 	"os"
 
-	"bootstrap/config"
-	"bootstrap/handlers"
-	"bootstrap/templates/pages"
+	"scaffhold/config"
+	"scaffhold/handlers"
+	"scaffhold/templates/pages"
 
 	_ "github.com/joho/godotenv/autoload"
 	"github.com/peterszarvas94/goat/database"

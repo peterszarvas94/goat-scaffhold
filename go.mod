@@ -1,6 +1,8 @@
-module bootstrap
+module scaffhold
 
-go 1.22.5
+go 1.22.7
+
+toolchain go1.23.4
 
 require github.com/a-h/templ v0.2.793
 

@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"bootstrap/templates/pages"
 	"net/http"
+	"scaffhold/templates/pages"
 
 	l "github.com/peterszarvas94/goat/logger"
 	"github.com/peterszarvas94/goat/server"

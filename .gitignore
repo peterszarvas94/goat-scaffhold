@@ -3,3 +3,4 @@ templates/**/*_templ.go
 sqlite.db
 dump.sql
 logs/
+main

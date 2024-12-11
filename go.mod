@@ -16,4 +16,4 @@ require (
 	github.com/mattn/go-sqlite3 v1.14.24 // indirect
 )
 
-replace github.com/peterszarvas94/goat => ../goat
+// replace github.com/peterszarvas94/goat => ../goat

@@ -8,7 +8,7 @@ require github.com/a-h/templ v0.2.793
 
 require (
 	github.com/joho/godotenv v1.5.1
-	github.com/peterszarvas94/goat v0.0.10
+	github.com/peterszarvas94/goat v0.0.11
 )
 
 require (

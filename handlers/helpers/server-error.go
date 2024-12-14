@@ -1,4 +1,4 @@
-package handlers
+package helpers
 
 import (
 	"net/http"
@@ -8,7 +8,7 @@ import (
 	"github.com/peterszarvas94/goat/server"
 )
 
-func ServerError(err error, w http.ResponseWriter, r *http.Request) {
+func HandleServerError(w http.ResponseWriter, r *http.Request, err error) {
 	l.Logger.Error(err.Error())
 	server.TemplShow(pages.ServerError(), w, r, http.StatusInternalServerError)
 }

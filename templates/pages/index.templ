@@ -4,29 +4,25 @@ import (
 	"fmt"
 	"scaffhold/config"
 	"scaffhold/templates/components"
+	"scaffhold/templates/layouts"
 )
 
 type IndexProps struct {
 	UserinfoProps *components.UserinfoProps
-	LoginProps    *components.LoginProps
 }
 
 templ Index(props *IndexProps) {
-	@components.Head()
-	<style type="text/css">
-		body {
-			max-width: 500px;
-			width: 100%;
-			margin: 0 auto;
-		}
-	</style>
-	<body hx-ext="response-targets">
-		<h1>{ fmt.Sprintf("Welcome to %s", config.AppName) }</h1>
-		if props.UserinfoProps != nil {
-			@components.Userinfo(*props.UserinfoProps)
-		}
-		if props.LoginProps != nil {
-			@components.Login(*props.LoginProps)
-		}
-	</body>
+	@layouts.Page("index") {
+		<body hx-ext="response-targets">
+			<h1>{ fmt.Sprintf("Welcome to %s", config.AppName) }</h1>
+			if props.UserinfoProps != nil {
+				@components.Userinfo(*props.UserinfoProps)
+			} else {
+				<a href="/login" hx-boost>Login</a>
+			}
+			<!-- if props.LoginProps != nil { -->
+			<!-- 	@components.Login(*props.LoginProps) -->
+			<!-- } -->
+		</body>
+	}
 }

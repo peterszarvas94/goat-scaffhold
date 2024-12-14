@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"scaffhold/db/models"
+	"scaffhold/handlers/helpers"
 	"scaffhold/templates/components"
 
 	"github.com/peterszarvas94/goat/database"
@@ -16,7 +17,7 @@ import (
 
 func Register(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
-		ServerError(err, w, r)
+		helpers.HandleServerError(w, r, err)
 		return
 	}
 
@@ -26,7 +27,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 	db, err := database.Get()
 	if err != nil {
-		ServerError(err, w, r)
+		helpers.HandleServerError(w, r, err)
 		return
 	}
 
@@ -63,7 +64,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if err != nil {
-		ServerError(err, w, r)
+		helpers.HandleServerError(w, r, err)
 		return
 	}
 

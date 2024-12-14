@@ -1,0 +1,10 @@
+package layouts
+
+import "scaffhold/templates/components"
+
+templ Page(page string) {
+	@components.Head(page)
+	<body hx-ext="response-targets">
+		{ children... }
+	</body>
+}

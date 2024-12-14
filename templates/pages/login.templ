@@ -1,0 +1,37 @@
+package pages 
+
+import "scaffhold/templates/layouts"
+import "scaffhold/templates/components"
+
+type LoginProps struct {
+	Values map[string]string
+	Errors map[string]string
+}
+
+templ Login(props LoginProps) {
+	@layouts.Page("login") {
+		<section id="login">
+			// login form
+			<h2>Log in</h2>
+			<form hx-post="/login" hx-target="#login" hx-target-error="#login" hx-swap="outerHTML">
+				@components.EmailInput(components.EmailInputProps{
+					Value: props.EmailValue,
+					Error: props.EmailError,
+				})
+				@components.PasswordInput(components.PasswordInputProps{
+					Value: props.PasswordValue,
+					Error: props.PasswordError,
+				})
+				<button type="submit">Submit</button>
+			</form>
+			// get register widget
+			<button
+				hx-get="/register"
+				hx-target="#login"
+				hx-swap="outerHTML"
+			>
+				Register instead
+			</button>
+		</section>
+	}
+}

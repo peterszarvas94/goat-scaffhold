@@ -5,6 +5,7 @@ import (
 
 	"scaffhold/config"
 	"scaffhold/handlers"
+	"scaffhold/middlewares"
 	"scaffhold/templates/pages"
 
 	_ "github.com/joho/godotenv/autoload"
@@ -39,15 +40,16 @@ func main() {
 
 	mux := server.NewMux(url)
 	mux.TemplGet("/", pages.NotFound())
-	mux.Get("/{$}", handlers.Index)
+
+	mux.Get("/{$}", middlewares.LoggedIn(handlers.Index))
 
 	mux.Get("/register", handlers.RegisterWidget)
-	mux.Post("/register", handlers.Register)
+	mux.Post("/register", middlewares.LoggedIn(handlers.Register))
 
 	mux.Get("/login", handlers.LoginWidget)
-	mux.Post("/login", handlers.Login)
+	mux.Post("/login", middlewares.LoggedIn(handlers.Login))
 
-	mux.Post("/logout", handlers.Logout)
+	mux.Post("/logout", middlewares.LoggedIn(handlers.Logout))
 
 	serverId := uuid.New("srv")
 	s := server.NewServer(mux)

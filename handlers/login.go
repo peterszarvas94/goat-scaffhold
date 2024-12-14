@@ -8,6 +8,7 @@ import (
 
 	"scaffhold/config"
 	"scaffhold/db/models"
+	"scaffhold/handlers/helpers"
 	"scaffhold/templates/components"
 
 	"github.com/peterszarvas94/goat/database"
@@ -17,8 +18,14 @@ import (
 )
 
 func Login(w http.ResponseWriter, r *http.Request) {
+	ctxUser, ok := r.Context().Value("user").(*models.User)
+	if !ok || ctxUser == nil {
+		LoginWidget(w, r)
+		return
+	}
+
 	if err := r.ParseForm(); err != nil {
-		ServerError(err, w, r)
+		helpers.HandleServerError(w, r, err)
 		return
 	}
 
@@ -27,7 +34,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	db, err := database.Get()
 	if err != nil {
-		ServerError(err, w, r)
+		helpers.HandleServerError(w, r, err)
 		return
 	}
 
@@ -57,7 +64,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if err != nil {
-		ServerError(err, w, r)
+		helpers.HandleServerError(w, r, err)
 		return
 	}
 

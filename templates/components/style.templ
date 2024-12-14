@@ -1,0 +1,18 @@
+package components
+
+templ Style(page string) {
+	switch page {
+		case "login":
+			<style type="text/css">
+				#login {
+					form {
+						display: flex;
+						flex-direction: column;
+						gap: 1rem;
+					}
+				}
+			</style>
+		default:
+			<style></style>
+	}
+}

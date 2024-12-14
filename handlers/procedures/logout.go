@@ -1,22 +1,21 @@
-package handlers
+package procedures
 
 import (
 	"context"
 	"log/slog"
 	"net/http"
 	"scaffhold/db/models"
-	"scaffhold/templates/components"
-	"scaffhold/templates/pages"
+	"scaffhold/handlers/helpers"
 
 	"github.com/peterszarvas94/goat/database"
 	l "github.com/peterszarvas94/goat/logger"
-	"github.com/peterszarvas94/goat/server"
 )
 
 func Logout(w http.ResponseWriter, r *http.Request) {
-	db, err := database.Get()
-	if err != nil {
-		server.TemplShow(pages.ServerError(), w, r, http.StatusInternalServerError)
+	ctxUser, ok := r.Context().Value("user").(*models.User)
+	if !ok || ctxUser == nil {
+		// if not logged in, redirect to index page
+		http.Redirect(w, r, "/", http.StatusMovedPermanently)
 		return
 	}
 
@@ -28,6 +27,12 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 
 	l.Logger.Debug("Cookie is read", slog.String("cookie_name", cookie.Name))
 
+	db, err := database.Get()
+	if err != nil {
+		helpers.HandleServerError(w, r, err)
+		return
+	}
+
 	queries := models.New(db)
 	err = queries.DeleteSession(context.Background(), cookie.Value)
 	if err != nil {
@@ -37,18 +42,11 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 
 	l.Logger.Debug("Session is deleted", slog.String("session_id", cookie.Value))
 
-	cookie = &http.Cookie{
-		Name:   "sessionToken",
-		Value:  "",
-		Path:   "/",
-		MaxAge: -1,
-	}
-
-	http.SetCookie(w, cookie)
+	helpers.ResetCookie(&w)
 
 	l.Logger.Debug("Cookie is invalidated", slog.String("cookie_name", cookie.Name))
 
 	l.Logger.Debug("Logged out")
 
-	server.TemplShow(components.Login(components.LoginProps{}), w, r, http.StatusOK)
+	w.Header().Add("HX-Redirect", "/")
 }

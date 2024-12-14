@@ -14,17 +14,18 @@ templ Head(page string) {
 		<!--js-->
 		<script src="https://unpkg.com/htmx.org@2.0.3"></script>
 		<script src="https://unpkg.com/htmx-ext-response-targets@2.0.0/response-targets.js"></script>
+		<script src="https://unpkg.com/htmx-ext-head-support@2.0.1/head-support.js"></script>
 		<script>htmx.logAll()</script>
 		// <script src="script.js" defer></script>
 		<!--css-->
 		<link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"/>
 		<style type="text/css">
-		body {
-			max-width: 500px;
-			width: 100%;
-			margin: 0 auto;
-		}
-	</style>
+			body {
+				max-width: 500px;
+				width: 100%;
+				margin: 0 auto;
+			}
+		</style>
 		@Style(page)
 	</head>
 }

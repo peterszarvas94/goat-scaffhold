@@ -25,7 +25,7 @@ func LoggedIn(next http.HandlerFunc) http.HandlerFunc {
 			l.Logger.Debug("Cookie not found")
 
 			// 1. no cookie -> next with err
-			helpers.ServeUnauthorized(w, r, next)
+			next(w, r)
 			return
 		}
 
@@ -41,7 +41,7 @@ func LoggedIn(next http.HandlerFunc) http.HandlerFunc {
 			l.Logger.Debug("Cookie is reseted", slog.String("cookie_name", cookie.Name))
 
 			// 2. cookie but no session -> next with err
-			helpers.ServeUnauthorized(w, r, next)
+			next(w, r)
 			return
 		}
 
@@ -57,7 +57,7 @@ func LoggedIn(next http.HandlerFunc) http.HandlerFunc {
 			}
 
 			// 3. cookie and session exists but expired -> next with err
-			helpers.ServeUnauthorized(w, r, next)
+			next(w, r)
 			return
 		}
 

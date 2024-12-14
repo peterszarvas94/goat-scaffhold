@@ -4,7 +4,7 @@ import "scaffhold/templates/components"
 
 templ Page(page string) {
 	@components.Head(page)
-	<body hx-ext="response-targets">
+	<body hx-ext="response-targets, head-support">
 		{ children... }
 	</body>
 }

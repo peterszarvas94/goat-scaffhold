@@ -1,26 +1,25 @@
-package handlers
+package procedures
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 	"net/http"
 	"time"
 
-	"scaffhold/config"
 	"scaffhold/db/models"
 	"scaffhold/handlers/helpers"
-	"scaffhold/templates/components"
 
 	"github.com/peterszarvas94/goat/database"
 	l "github.com/peterszarvas94/goat/logger"
-	"github.com/peterszarvas94/goat/server"
 	"github.com/peterszarvas94/goat/uuid"
 )
 
 func Login(w http.ResponseWriter, r *http.Request) {
 	ctxUser, ok := r.Context().Value("user").(*models.User)
-	if !ok || ctxUser == nil {
-		LoginWidget(w, r)
+	if ok && ctxUser != nil {
+		// if logged in, redirect to index page
+		w.Header().Add("HX-Redirect", "/")
 		return
 	}
 
@@ -45,15 +44,13 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if err != nil {
-		server.TemplShow(components.Login(components.LoginProps{
-			EmailValue:    email,
-			PasswordValue: password,
-			PasswordError: "Email or password is incorrect",
-		}), w, r, http.StatusForbidden)
-
+		// wrong credentials
+		w.WriteHeader(http.StatusUnauthorized)
+		fmt.Fprintf(w, "Email or password is incorrect")
 		return
 	}
 
+	// correct credentials
 	l.Logger.Debug("Login successful", slog.String("user_id", user.ID))
 
 	sessionId := uuid.New("ses")
@@ -70,40 +67,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	l.Logger.Debug("Session created", slog.String("user_id", user.ID))
 
-	secure := true
-	if config.Vars.Env == "dev" {
-		secure = false
-	}
+	helpers.SetCookie(&w, session.ID)
 
-	httponly := true
-	if config.Vars.Env == "dev" {
-		httponly = false
-	}
-
-	cookie := &http.Cookie{
-		Name:     "sessionToken",
-		Value:    session.ID,
-		Path:     "/",
-		HttpOnly: httponly,
-		SameSite: http.SameSiteLaxMode,
-		Secure:   secure,
-		MaxAge:   3600,
-	}
-
-	http.SetCookie(w, cookie)
-
-	l.Logger.Debug("Cookie is set", slog.String("session_id", session.ID))
-
-	l.Logger.Debug("Userinfo widget requested", slog.String("user_id", user.ID))
-
-	server.TemplShow(components.Userinfo(components.UserinfoProps{
-		Name:  user.Name,
-		Email: user.Email,
-	}), w, r, http.StatusOK)
-}
-
-func LoginWidget(w http.ResponseWriter, r *http.Request) {
-	l.Logger.Debug("Login widget requested")
-
-	server.TemplShow(components.Login(components.LoginProps{}), w, r, http.StatusOK)
+	w.Header().Set("HX-Redirect", "/")
 }

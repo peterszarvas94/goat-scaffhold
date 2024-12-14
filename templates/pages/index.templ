@@ -18,11 +18,8 @@ templ Index(props *IndexProps) {
 			if props.UserinfoProps != nil {
 				@components.Userinfo(*props.UserinfoProps)
 			} else {
-				<a href="/login" hx-boost>Login</a>
+				<a href="/login" hx-boost="true">Login</a>
 			}
-			<!-- if props.LoginProps != nil { -->
-			<!-- 	@components.Login(*props.LoginProps) -->
-			<!-- } -->
 		</body>
 	}
 }

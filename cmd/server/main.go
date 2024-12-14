@@ -4,9 +4,10 @@ import (
 	"os"
 
 	"scaffhold/config"
-	"scaffhold/handlers"
+	"scaffhold/handlers/pages"
+	"scaffhold/handlers/procedures"
 	"scaffhold/middlewares"
-	"scaffhold/templates/pages"
+	pageTemplates "scaffhold/templates/pages"
 
 	_ "github.com/joho/godotenv/autoload"
 	"github.com/peterszarvas94/goat/database"
@@ -39,17 +40,15 @@ func main() {
 	url := server.NewLocalHostUrl(config.Port)
 
 	mux := server.NewMux(url)
-	mux.TemplGet("/", pages.NotFound())
 
-	mux.Get("/{$}", middlewares.LoggedIn(handlers.Index))
+	mux.TemplGet("/", pageTemplates.NotFound())
+	mux.Get("/{$}", middlewares.LoggedIn(pages.Index))
+	mux.Get("/register", middlewares.LoggedIn(pages.Register))
+	mux.Get("/login", middlewares.LoggedIn(pages.Login))
 
-	mux.Get("/register", handlers.RegisterWidget)
-	mux.Post("/register", middlewares.LoggedIn(handlers.Register))
-
-	mux.Get("/login", handlers.LoginWidget)
-	mux.Post("/login", middlewares.LoggedIn(handlers.Login))
-
-	mux.Post("/logout", middlewares.LoggedIn(handlers.Logout))
+	mux.Post("/register", middlewares.LoggedIn(procedures.Register))
+	mux.Post("/login", middlewares.LoggedIn(procedures.Login))
+	mux.Post("/logout", middlewares.LoggedIn(procedures.Logout))
 
 	serverId := uuid.New("srv")
 	s := server.NewServer(mux)

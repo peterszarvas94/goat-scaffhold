@@ -2,7 +2,6 @@ package procedures
 
 import (
 	"context"
-	"fmt"
 	"log/slog"
 	"net/http"
 	"time"
@@ -19,21 +18,31 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	ctxUser, ok := r.Context().Value("user").(*models.User)
 	if ok && ctxUser != nil {
 		// if logged in, redirect to index page
-		w.Header().Add("HX-Redirect", "/")
+		l.Logger.Debug("Redirecting to \"/\"")
+		http.Redirect(w, r, "/", http.StatusMovedPermanently)
 		return
 	}
 
 	if err := r.ParseForm(); err != nil {
-		helpers.HandleServerError(w, r, err)
+		helpers.ServerError(w, r, err)
 		return
 	}
 
 	email := r.FormValue("email")
+	if email == "" {
+		helpers.BadRequest(w, r, "Email can not be empty")
+		return
+	}
+
 	password := r.FormValue("password")
+	if password == "" {
+		helpers.BadRequest(w, r, "Password can not be empty")
+		return
+	}
 
 	db, err := database.Get()
 	if err != nil {
-		helpers.HandleServerError(w, r, err)
+		helpers.ServerError(w, r, err)
 		return
 	}
 
@@ -45,8 +54,10 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		// wrong credentials
-		w.WriteHeader(http.StatusUnauthorized)
-		fmt.Fprintf(w, "Email or password is incorrect")
+		helpers.Unauthorized(w, r, "Wrong credentials",
+			slog.String("email", email),
+			slog.String("password", password),
+		)
 		return
 	}
 
@@ -61,7 +72,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if err != nil {
-		helpers.HandleServerError(w, r, err)
+		helpers.ServerError(w, r, err)
 		return
 	}
 
@@ -69,5 +80,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	helpers.SetCookie(&w, session.ID)
 
-	w.Header().Set("HX-Redirect", "/")
+	l.Logger.Debug("Redirecting to \"/\"")
+	http.Redirect(w, r, "/", http.StatusMovedPermanently)
 }

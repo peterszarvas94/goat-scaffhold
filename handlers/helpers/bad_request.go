@@ -7,8 +7,8 @@ import (
 	l "github.com/peterszarvas94/goat/logger"
 )
 
-func Unauthorized(w http.ResponseWriter, r *http.Request, msg string, args ...any) {
+func BadRequest(w http.ResponseWriter, r *http.Request, msg string, args ...any) {
 	l.Logger.Error(msg, args...)
-	w.WriteHeader(http.StatusUnauthorized)
+	w.WriteHeader(http.StatusBadRequest)
 	fmt.Fprintln(w, msg)
 }

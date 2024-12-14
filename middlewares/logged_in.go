@@ -16,7 +16,7 @@ func LoggedIn(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		db, err := database.Get()
 		if err != nil {
-			helpers.HandleServerError(w, r, err)
+			helpers.ServerError(w, r, err)
 			return
 		}
 
@@ -52,7 +52,7 @@ func LoggedIn(next http.HandlerFunc) http.HandlerFunc {
 
 			err = queries.DeleteSession(context.Background(), session.ID)
 			if err != nil {
-				helpers.HandleServerError(w, r, err)
+				helpers.ServerError(w, r, err)
 				return
 			}
 
@@ -63,7 +63,7 @@ func LoggedIn(next http.HandlerFunc) http.HandlerFunc {
 
 		user, err := queries.GetUserByID(context.Background(), session.UserID)
 		if err != nil {
-			helpers.HandleServerError(w, r, err)
+			helpers.ServerError(w, r, err)
 			return
 		}
 

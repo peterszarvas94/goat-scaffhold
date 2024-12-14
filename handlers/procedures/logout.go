@@ -15,6 +15,7 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 	ctxUser, ok := r.Context().Value("user").(*models.User)
 	if !ok || ctxUser == nil {
 		// if not logged in, redirect to index page
+		l.Logger.Debug("Redirecting to \"/\"")
 		http.Redirect(w, r, "/", http.StatusMovedPermanently)
 		return
 	}
@@ -29,7 +30,7 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 
 	db, err := database.Get()
 	if err != nil {
-		helpers.HandleServerError(w, r, err)
+		helpers.ServerError(w, r, err)
 		return
 	}
 
@@ -48,5 +49,6 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 
 	l.Logger.Debug("Logged out")
 
-	w.Header().Add("HX-Redirect", "/")
+	l.Logger.Debug("Redirecting to \"/\"")
+	http.Redirect(w, r, "/", http.StatusMovedPermanently)
 }

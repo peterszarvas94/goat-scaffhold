@@ -19,17 +19,35 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	ctxUser, ok := r.Context().Value("user").(*models.User)
 	if ok && ctxUser != nil {
 		// if logged in, redirect to index page
-		w.Header().Add("HX-Redirect", "/")
+		l.Logger.Debug("Redirecting to \"/\"")
+		http.Redirect(w, r, "/", http.StatusMovedPermanently)
 		return
 	}
 
 	name := r.FormValue("name")
+	if name == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprintln(w, "Name is empty")
+		return
+	}
+
 	email := r.FormValue("email")
+	if email == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprintln(w, "Email is empty")
+		return
+	}
+
 	password := r.FormValue("password")
+	if password == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprintln(w, "Password is empty")
+		return
+	}
 
 	db, err := database.Get()
 	if err != nil {
-		helpers.HandleServerError(w, r, err)
+		helpers.ServerError(w, r, err)
 		return
 	}
 
@@ -50,7 +68,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		helpers.HandleServerError(w, r, errors.New("Unexpected error"))
+		helpers.ServerError(w, r, errors.New("Unexpected error"))
 		return
 	}
 
@@ -62,11 +80,12 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if err != nil {
-		helpers.HandleServerError(w, r, err)
+		helpers.ServerError(w, r, err)
 		return
 	}
 
 	l.Logger.Debug("Registered", slog.String("user_id", user.ID))
 
-	w.Header().Set("HX-Redirect", "/login")
+	l.Logger.Debug("Redirecting to \"/\"")
+	http.Redirect(w, r, "/", http.StatusMovedPermanently)
 }

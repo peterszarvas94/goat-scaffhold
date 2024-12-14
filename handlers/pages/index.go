@@ -12,7 +12,8 @@ import (
 func Index(w http.ResponseWriter, r *http.Request) {
 	var props *pages.IndexProps
 
-	if ctxUser, ok := r.Context().Value("user").(*models.User); ok && ctxUser != nil {
+	ctxUser, ok := r.Context().Value("user").(*models.User)
+	if ok && ctxUser != nil {
 		props = &pages.IndexProps{
 			UserinfoProps: &components.UserinfoProps{
 				Name:  ctxUser.Name,
@@ -23,5 +24,5 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		props = &pages.IndexProps{}
 	}
 
-	server.TemplShow(pages.Index(props), w, r, http.StatusOK)
+	server.Render(w, r, pages.Index(props), http.StatusOK)
 }

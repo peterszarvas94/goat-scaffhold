@@ -4,3 +4,5 @@ sqlite.db
 dump.sql
 logs/
 main
+go.work
+go.work.sum

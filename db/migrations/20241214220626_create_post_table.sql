@@ -1,11 +1,12 @@
 -- +goose Up
-CREATE TABLE session (
+CREATE TABLE post (
   id TEXT PRIMARY KEY,
+  title TEXT NOT NULL,
+  content TEXT NOT NULL,
   user_id TEXT NOT NULL,
-  valid_until DATETIME NOT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 -- +goose Down
-DROP TABLE create_session;
+DROP TABLE post;

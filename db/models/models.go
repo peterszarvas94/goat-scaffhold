@@ -9,6 +9,15 @@ import (
 	"time"
 )
 
+type Post struct {
+	ID        string
+	Title     string
+	Content   string
+	UserID    string
+	CreatedAt sql.NullTime
+	UpdatedAt sql.NullTime
+}
+
 type Session struct {
 	ID         string
 	UserID     string

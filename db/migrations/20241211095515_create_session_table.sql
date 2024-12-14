@@ -1,12 +1,11 @@
 -- +goose Up
-CREATE TABLE user (
+CREATE TABLE session (
   id TEXT PRIMARY KEY,
-  name TEXT UNIQUE NOT NULL,
-  email TEXT UNIQUE NOT NULL,
-  password TEXT NOT NULL,
+  user_id TEXT NOT NULL,
+  valid_until DATETIME NOT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 -- +goose Down
-DROP TABLE create_user;
+DROP TABLE session;

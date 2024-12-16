@@ -8,6 +8,12 @@ SELECT *
 FROM post
 ORDER BY name;
 
+-- name: GetPostsByUserId :many
+SELECT *
+FROM post
+WHERE user_id = ?
+ORDER BY created_at;
+
 -- name: CreatePost :one
 INSERT INTO post (id, title, content, user_id)
 VALUES (?, ?, ?, ?)

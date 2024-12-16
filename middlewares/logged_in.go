@@ -24,7 +24,7 @@ func LoggedIn(next http.HandlerFunc) http.HandlerFunc {
 		if err != nil {
 			l.Logger.Debug("Cookie not found")
 
-			// 1. no cookie -> next with err
+			// no cookie
 			next(w, r)
 			return
 		}
@@ -40,7 +40,7 @@ func LoggedIn(next http.HandlerFunc) http.HandlerFunc {
 
 			l.Logger.Debug("Cookie is reseted", slog.String("cookie_name", cookie.Name))
 
-			// 2. cookie but no session -> next with err
+			// cookie but no session
 			next(w, r)
 			return
 		}
@@ -56,7 +56,7 @@ func LoggedIn(next http.HandlerFunc) http.HandlerFunc {
 				return
 			}
 
-			// 3. cookie and session exists but expired -> next with err
+			// cookie and session exists but expired
 			next(w, r)
 			return
 		}
@@ -69,7 +69,7 @@ func LoggedIn(next http.HandlerFunc) http.HandlerFunc {
 
 		l.Logger.Debug("User exists", slog.String("user_id", user.ID))
 
-		// 4. cookie and session exists, and valid -> next with ctx
+		// cookie and session exists, and valid -> next with ctx
 		ctx := context.WithValue(r.Context(), "user", &user)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	}

@@ -9,12 +9,12 @@ templ Register() {
 	@layouts.Page("register") {
 		<section id="register">
 			<h2>Register</h2>
-			<form method="post" href="/register" hx-boost="true" hx-target-error="#register-error">
+			@components.Form("/register", "#register-error") {
 				@components.NameInput()
 				@components.EmailInput()
 				@components.PasswordInput()
 				<button type="submit">Submit</button>
-			</form>
+			}
 			<p id="register-error"></p>
 			<a
 				href="/login"

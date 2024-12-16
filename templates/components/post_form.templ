@@ -1,0 +1,16 @@
+package components
+
+type PostformProps struct {
+	CSRFToken string
+	UserID    string
+}
+
+templ Postform(props PostformProps) {
+	@Form("/post", "#post-error") {
+		@TitleInput()
+		@ContentInput()
+		@CSRFInput(props.CSRFToken)
+		<button type="submit">Create post</button>
+	}
+	<p id="post-error"></p>
+}

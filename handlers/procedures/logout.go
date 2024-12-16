@@ -16,7 +16,7 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 	if !ok || ctxUser == nil {
 		// if not logged in, redirect to index page
 		l.Logger.Debug("Redirecting to \"/\"")
-		http.Redirect(w, r, "/", http.StatusMovedPermanently)
+		helpers.HxRedirect(w, r, "/")
 		return
 	}
 
@@ -49,6 +49,5 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 
 	l.Logger.Debug("Logged out")
 
-	l.Logger.Debug("Redirecting to \"/\"")
-	http.Redirect(w, r, "/", http.StatusMovedPermanently)
+	helpers.HxRedirect(w, r, "/")
 }

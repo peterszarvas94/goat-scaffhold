@@ -19,8 +19,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	ctxUser, ok := r.Context().Value("user").(*models.User)
 	if ok && ctxUser != nil {
 		// if logged in, redirect to index page
-		l.Logger.Debug("Redirecting to \"/\"")
-		http.Redirect(w, r, "/", http.StatusMovedPermanently)
+		helpers.HxRedirect(w, r, "/")
 		return
 	}
 
@@ -86,6 +85,5 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 	l.Logger.Debug("Registered", slog.String("user_id", user.ID))
 
-	l.Logger.Debug("Redirecting to \"/\"")
-	http.Redirect(w, r, "/", http.StatusMovedPermanently)
+	helpers.HxRedirect(w, r, "/")
 }

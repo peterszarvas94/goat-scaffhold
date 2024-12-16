@@ -39,19 +39,24 @@ func main() {
 	// set up server
 	url := server.NewLocalHostUrl(config.Port)
 
-	mux := server.NewMux(url)
+	router := server.NewRouter()
 
-	mux.TemplGet("/", pageTemplates.NotFound())
-	mux.Get("/{$}", middlewares.LoggedIn(pages.Index))
-	mux.Get("/register", middlewares.LoggedIn(pages.Register))
-	mux.Get("/login", middlewares.LoggedIn(pages.Login))
+	router.Favicon("favicon.ico")
 
-	mux.Post("/register", middlewares.LoggedIn(procedures.Register))
-	mux.Post("/login", middlewares.LoggedIn(procedures.Login))
-	mux.Post("/logout", middlewares.LoggedIn(procedures.Logout))
+	router.Use(middlewares.Cache)
+
+	router.TemplGet("/", pageTemplates.NotFound())
+	router.Get("/{$}", middlewares.LoggedIn(pages.Index))
+	router.Get("/register", middlewares.LoggedIn(pages.Register))
+	router.Get("/login", middlewares.LoggedIn(pages.Login))
+
+	router.Post("/register", middlewares.LoggedIn(procedures.Register))
+	router.Post("/login", middlewares.LoggedIn(procedures.Login))
+	router.Post("/logout", middlewares.LoggedIn(procedures.Logout))
+	router.Post("/post", middlewares.LoggedIn(middlewares.CSRF(procedures.CreatePost)))
+
+	s := server.NewServer(router, url)
 
 	serverId := uuid.New("srv")
-	s := server.NewServer(mux)
-
 	s.Serve(url, serverId)
 }

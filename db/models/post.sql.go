@@ -76,6 +76,43 @@ func (q *Queries) GetPostByID(ctx context.Context, id string) (Post, error) {
 	return i, err
 }
 
+const getPostsByUserId = `-- name: GetPostsByUserId :many
+SELECT id, title, content, user_id, created_at, updated_at
+FROM post
+WHERE user_id = ?
+ORDER BY created_at
+`
+
+func (q *Queries) GetPostsByUserId(ctx context.Context, userID string) ([]Post, error) {
+	rows, err := q.db.QueryContext(ctx, getPostsByUserId, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Post
+	for rows.Next() {
+		var i Post
+		if err := rows.Scan(
+			&i.ID,
+			&i.Title,
+			&i.Content,
+			&i.UserID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const listPost = `-- name: ListPost :many
 SELECT id, title, content, user_id, created_at, updated_at
 FROM post

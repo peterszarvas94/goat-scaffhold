@@ -5,21 +5,30 @@ import (
 	"scaffhold/config"
 	"scaffhold/templates/components"
 	"scaffhold/templates/layouts"
+	"scaffhold/db/models"
 )
 
 type IndexProps struct {
 	UserinfoProps *components.UserinfoProps
+	PostformProps *components.PostformProps
+	Posts         []models.Post
 }
 
 templ Index(props *IndexProps) {
 	@layouts.Page("index") {
 		<body hx-ext="response-targets">
 			<h1>{ fmt.Sprintf("Welcome to %s", config.AppName) }</h1>
-			if props.UserinfoProps != nil {
+			if props.UserinfoProps != nil && props.PostformProps != nil {
 				@components.Userinfo(*props.UserinfoProps)
+				@components.Postform(*props.PostformProps)
 			} else {
 				<a href="/login" hx-boost="true">Login</a>
 			}
+			<ul id="posts">
+				for _, post := range props.Posts {
+					@components.Post(&post)
+				}
+			</ul>
 		</body>
 	}
 }

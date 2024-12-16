@@ -9,11 +9,11 @@ templ Login() {
 	@layouts.Page("login") {
 		<section id="login">
 			<h2>Log in</h2>
-			<form method="post" href="/login" hx-boost="true" hx-target-error="#login-error">
+			@components.Form("/login", "#login-error") {
 				@components.EmailInput()
 				@components.PasswordInput()
 				<button type="submit">Submit</button>
-			</form>
+			}
 			<p id="login-error"></p>
 			<a
 				href="/register"

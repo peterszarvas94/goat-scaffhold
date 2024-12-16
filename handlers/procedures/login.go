@@ -18,8 +18,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	ctxUser, ok := r.Context().Value("user").(*models.User)
 	if ok && ctxUser != nil {
 		// if logged in, redirect to index page
-		l.Logger.Debug("Redirecting to \"/\"")
-		http.Redirect(w, r, "/", http.StatusMovedPermanently)
+		helpers.HxRedirect(w, r, "/")
 		return
 	}
 
@@ -80,6 +79,5 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	helpers.SetCookie(&w, session.ID)
 
-	l.Logger.Debug("Redirecting to \"/\"")
-	http.Redirect(w, r, "/", http.StatusMovedPermanently)
+	helpers.HxRedirect(w, r, "/")
 }

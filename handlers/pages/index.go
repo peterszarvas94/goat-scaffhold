@@ -8,6 +8,8 @@ import (
 	"scaffhold/templates/components"
 	"scaffhold/templates/pages"
 
+	"github.com/peterszarvas94/goat/csrf"
+	"github.com/peterszarvas94/goat/ctx"
 	"github.com/peterszarvas94/goat/database"
 	"github.com/peterszarvas94/goat/server"
 )
@@ -15,15 +17,22 @@ import (
 func Index(w http.ResponseWriter, r *http.Request) {
 	props := &pages.IndexProps{}
 
-	ctxUser, ok := r.Context().Value("user").(*models.User)
+	ctxSession, ok := ctx.GetFromCtx[models.Session](r, "session")
+	if !ok || ctxSession == nil {
+		server.Render(w, r, pages.Index(props), http.StatusOK)
+		return
+	}
+
+	ctxUser, ok := ctx.GetFromCtx[models.User](r, "user")
 	if !ok || ctxUser == nil {
 		server.Render(w, r, pages.Index(props), http.StatusOK)
 		return
 	}
 
-	props.UserinfoProps = &components.UserinfoProps{
-		Name:  ctxUser.Name,
-		Email: ctxUser.Email,
+	csrfToken, err := csrf.GetCSRFToken(ctxSession.ID)
+	if err != nil {
+		server.Render(w, r, pages.Index(props), http.StatusOK)
+		return
 	}
 
 	db, err := database.Get()
@@ -39,10 +48,15 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	props.UserinfoProps = &components.UserinfoProps{
+		Name:  ctxUser.Name,
+		Email: ctxUser.Email,
+	}
+
 	props.Posts = posts
 
 	props.PostformProps = &components.PostformProps{
-		CSRFToken: "very_good_token",
+		CSRFToken: csrfToken,
 		UserID:    ctxUser.ID,
 	}
 

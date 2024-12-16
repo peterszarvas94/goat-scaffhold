@@ -8,6 +8,8 @@ import (
 	"scaffhold/handlers/helpers"
 	"time"
 
+	"github.com/peterszarvas94/goat/csrf"
+	"github.com/peterszarvas94/goat/ctx"
 	"github.com/peterszarvas94/goat/database"
 	l "github.com/peterszarvas94/goat/logger"
 )
@@ -34,13 +36,15 @@ func LoggedIn(next http.HandlerFunc) http.HandlerFunc {
 		queries := models.New(db)
 		session, err := queries.GetSessionByID(context.Background(), cookie.Value)
 		if err != nil {
-			l.Logger.Debug("No session found, reseting cookie", slog.String("session_id", cookie.Value))
+			l.Logger.Debug("No session found", slog.String("session_id", cookie.Value))
 
 			helpers.ResetCookie(&w)
 
 			l.Logger.Debug("Cookie is reseted", slog.String("cookie_name", cookie.Name))
 
-			// cookie but no session
+			csrf.DeleteCSRFToken(cookie.Value)
+
+			// cookie, but no session -> next
 			next(w, r)
 			return
 		}
@@ -56,7 +60,9 @@ func LoggedIn(next http.HandlerFunc) http.HandlerFunc {
 				return
 			}
 
-			// cookie and session exists but expired
+			csrf.DeleteCSRFToken(session.ID)
+
+			// cookie and session, but expired -> next
 			next(w, r)
 			return
 		}
@@ -69,8 +75,13 @@ func LoggedIn(next http.HandlerFunc) http.HandlerFunc {
 
 		l.Logger.Debug("User exists", slog.String("user_id", user.ID))
 
-		// cookie and session exists, and valid -> next with ctx
-		ctx := context.WithValue(r.Context(), "user", &user)
-		next.ServeHTTP(w, r.WithContext(ctx))
+		items := []ctx.KV{
+			{Key: "user", Value: &user},
+			{Key: "session", Value: &session},
+		}
+
+		// cookie, session and csrf token, and valid -> next with ctx
+		r = ctx.AddToContext(r, items)
+		next(w, r)
 	}
 }

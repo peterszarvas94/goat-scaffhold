@@ -24,11 +24,14 @@ templ Index(props *IndexProps) {
 			} else {
 				<a href="/login" hx-boost="true">Login</a>
 			}
-			<ul id="posts">
-				for _, post := range props.Posts {
-					@components.Post(&post)
-				}
-			</ul>
+			<section>
+				<h2>Posts</h2>
+				<ul id="posts">
+					for _, post := range props.Posts {
+						@components.Post(&post)
+					}
+				</ul>
+			</section>
 		</body>
 	}
 }

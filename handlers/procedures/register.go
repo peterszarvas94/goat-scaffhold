@@ -85,5 +85,5 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 	l.Logger.Debug("Registered", slog.String("user_id", user.ID))
 
-	helpers.HxRedirect(w, r, "/")
+	helpers.HxRedirect(w, r, "/login")
 }

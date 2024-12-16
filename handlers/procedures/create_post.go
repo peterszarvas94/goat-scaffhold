@@ -6,16 +6,17 @@ import (
 	"net/http"
 	"scaffhold/db/models"
 	"scaffhold/handlers/helpers"
+	"scaffhold/templates/components"
 
 	"github.com/peterszarvas94/goat/database"
 	l "github.com/peterszarvas94/goat/logger"
+	"github.com/peterszarvas94/goat/server"
 	"github.com/peterszarvas94/goat/uuid"
 )
 
 func CreatePost(w http.ResponseWriter, r *http.Request) {
 	ctxUser, ok := r.Context().Value("user").(*models.User)
 	if !ok || ctxUser == nil {
-		// logged in
 		helpers.Unauthorized(w, r, "Not logged in")
 		return
 	}
@@ -66,5 +67,7 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 
 	l.Logger.Debug("Post created", slog.String("post_id", post.ID))
 
-	helpers.HxRedirect(w, r, "/")
+	server.Render(w, r, components.Post(&models.Post{
+		Title: post.Title,
+	}), http.StatusOK)
 }

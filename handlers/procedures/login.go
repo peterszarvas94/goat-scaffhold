@@ -9,6 +9,7 @@ import (
 	"scaffhold/db/models"
 	"scaffhold/handlers/helpers"
 
+	"github.com/peterszarvas94/goat/csrf"
 	"github.com/peterszarvas94/goat/database"
 	l "github.com/peterszarvas94/goat/logger"
 	"github.com/peterszarvas94/goat/uuid"
@@ -76,6 +77,14 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	l.Logger.Debug("Session created", slog.String("user_id", user.ID))
+
+	_, err = csrf.AddNewCSRFToken(session.ID)
+	if err != nil {
+		helpers.ServerError(w, r, err)
+		return
+	}
+
+	l.Logger.Debug("CSRF token created", slog.String("session_id", session.ID))
 
 	helpers.SetCookie(&w, session.ID)
 

@@ -10,13 +10,14 @@ import (
 	"scaffhold/handlers/helpers"
 
 	"github.com/peterszarvas94/goat/csrf"
+	"github.com/peterszarvas94/goat/ctx"
 	"github.com/peterszarvas94/goat/database"
-	l "github.com/peterszarvas94/goat/logger"
+	"github.com/peterszarvas94/goat/logger"
 	"github.com/peterszarvas94/goat/uuid"
 )
 
 func Login(w http.ResponseWriter, r *http.Request) {
-	ctxUser, ok := r.Context().Value("user").(*models.User)
+	ctxUser, ok := ctx.GetFromCtx[models.User](r, "user")
 	if ok && ctxUser != nil {
 		// if logged in, redirect to index page
 		helpers.HxRedirect(w, r, "/")
@@ -61,8 +62,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// correct credentials
-	l.Logger.Debug("Login successful", slog.String("user_id", user.ID))
+	logger.AddToContext("user_id", user.ID)
 
 	sessionId := uuid.New("ses")
 	session, err := queries.CreateSession(context.Background(), models.CreateSessionParams{
@@ -76,17 +76,19 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	l.Logger.Debug("Session created", slog.String("user_id", user.ID))
+	logger.AddToContext("session_id", session.ID)
 
-	_, err = csrf.AddNewCSRFToken(session.ID)
+	csrfToken, err := csrf.AddNewCSRFToken(session.ID)
 	if err != nil {
 		helpers.ServerError(w, r, err)
 		return
 	}
 
-	l.Logger.Debug("CSRF token created", slog.String("session_id", session.ID))
+	logger.AddToContext("csrf_token", csrfToken)
 
 	helpers.SetCookie(&w, session.ID)
+
+	logger.Debug("Logged in")
 
 	helpers.HxRedirect(w, r, "/")
 }

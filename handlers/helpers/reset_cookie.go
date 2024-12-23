@@ -1,10 +1,7 @@
 package helpers
 
 import (
-	"log/slog"
 	"net/http"
-
-	l "github.com/peterszarvas94/goat/logger"
 )
 
 func ResetCookie(w *http.ResponseWriter) {
@@ -16,5 +13,4 @@ func ResetCookie(w *http.ResponseWriter) {
 	}
 
 	http.SetCookie(*w, cookie)
-	l.Logger.Debug("Cookie is reset", slog.String("cookie_name", cookie.Name))
 }

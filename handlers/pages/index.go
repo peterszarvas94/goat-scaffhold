@@ -2,6 +2,7 @@ package pages
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"scaffhold/db/models"
 	"scaffhold/handlers/helpers"
@@ -11,6 +12,7 @@ import (
 	"github.com/peterszarvas94/goat/csrf"
 	"github.com/peterszarvas94/goat/ctx"
 	"github.com/peterszarvas94/goat/database"
+	"github.com/peterszarvas94/goat/logger"
 	"github.com/peterszarvas94/goat/server"
 )
 
@@ -31,6 +33,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
 	csrfToken, err := csrf.GetCSRFToken(ctxSession.ID)
 	if err != nil {
+		fmt.Println(err)
 		server.Render(w, r, pages.Index(props), http.StatusOK)
 		return
 	}
@@ -60,5 +63,6 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		UserID:    ctxUser.ID,
 	}
 
+	logger.Debug("Index is rendered")
 	server.Render(w, r, pages.Index(props), http.StatusOK)
 }

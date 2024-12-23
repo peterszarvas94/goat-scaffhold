@@ -64,10 +64,37 @@ func (q *Queries) GetSessionByID(ctx context.Context, id string) (Session, error
 	return i, err
 }
 
+const listSessionIDs = `-- name: ListSessionIDs :many
+SELECT "id"
+FROM session
+`
+
+func (q *Queries) ListSessionIDs(ctx context.Context) ([]string, error) {
+	rows, err := q.db.QueryContext(ctx, listSessionIDs)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []string
+	for rows.Next() {
+		var id string
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const listSessions = `-- name: ListSessions :many
 SELECT id, user_id, valid_until, created_at, updated_at
 FROM session
-ORDER BY name
 `
 
 func (q *Queries) ListSessions(ctx context.Context) ([]Session, error) {

@@ -1,13 +1,13 @@
 package middlewares
 
 import (
-	"context"
 	"net/http"
 	"scaffhold/db/models"
 	"scaffhold/handlers/helpers"
 
 	"github.com/peterszarvas94/goat/csrf"
 	"github.com/peterszarvas94/goat/ctx"
+	"github.com/peterszarvas94/goat/logger"
 )
 
 func CSRF(next http.HandlerFunc) http.HandlerFunc {
@@ -36,7 +36,10 @@ func CSRF(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		ctx := context.WithValue(r.Context(), "csrf_token", csrfToken)
-		next.ServeHTTP(w, r.WithContext(ctx))
+		logger.AddToContext("csrf_token", csrfToken)
+
+		items := ctx.KV{"csrf_token": &csrfToken}
+		r = ctx.AddToContext(r, items)
+		next.ServeHTTP(w, r)
 	}
 }

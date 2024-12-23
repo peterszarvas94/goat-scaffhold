@@ -1,11 +1,8 @@
 package helpers
 
 import (
-	"log/slog"
 	"net/http"
 	"scaffhold/config"
-
-	l "github.com/peterszarvas94/goat/logger"
 )
 
 func SetCookie(w *http.ResponseWriter, sessionID string) {
@@ -30,7 +27,4 @@ func SetCookie(w *http.ResponseWriter, sessionID string) {
 	}
 
 	http.SetCookie(*w, cookie)
-
-	l.Logger.Debug("Cookie is set", slog.String("session_id", sessionID))
-
 }

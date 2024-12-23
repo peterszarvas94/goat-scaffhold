@@ -4,19 +4,19 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"log/slog"
 	"net/http"
 
 	"scaffhold/db/models"
 	"scaffhold/handlers/helpers"
 
+	"github.com/peterszarvas94/goat/ctx"
 	"github.com/peterszarvas94/goat/database"
-	l "github.com/peterszarvas94/goat/logger"
+	"github.com/peterszarvas94/goat/logger"
 	"github.com/peterszarvas94/goat/uuid"
 )
 
 func Register(w http.ResponseWriter, r *http.Request) {
-	ctxUser, ok := r.Context().Value("user").(*models.User)
+	ctxUser, ok := ctx.GetFromCtx[models.User](r, "user")
 	if ok && ctxUser != nil {
 		// if logged in, redirect to index page
 		helpers.HxRedirect(w, r, "/")
@@ -83,7 +83,8 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	l.Logger.Debug("Registered", slog.String("user_id", user.ID))
+	logger.AddToContext("user_id", user.ID)
+	logger.Debug("Registered")
 
 	helpers.HxRedirect(w, r, "/login")
 }

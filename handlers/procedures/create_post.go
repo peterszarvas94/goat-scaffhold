@@ -2,27 +2,27 @@ package procedures
 
 import (
 	"context"
-	"log/slog"
 	"net/http"
 	"scaffhold/db/models"
 	"scaffhold/handlers/helpers"
 	"scaffhold/templates/components"
 
+	"github.com/peterszarvas94/goat/ctx"
 	"github.com/peterszarvas94/goat/database"
-	l "github.com/peterszarvas94/goat/logger"
+	"github.com/peterszarvas94/goat/logger"
 	"github.com/peterszarvas94/goat/server"
 	"github.com/peterszarvas94/goat/uuid"
 )
 
 func CreatePost(w http.ResponseWriter, r *http.Request) {
-	ctxUser, ok := r.Context().Value("user").(*models.User)
+	ctxUser, ok := ctx.GetFromCtx[models.User](r, "user")
 	if !ok || ctxUser == nil {
 		helpers.Unauthorized(w, r, "Not logged in")
 		return
 	}
 
-	token, ok := r.Context().Value("csrf_token").(string)
-	if !ok || token == "" {
+	token, ok := ctx.GetFromCtx[string](r, "csrf_token")
+	if !ok || *token == "" {
 		// token not found
 		helpers.Unauthorized(w, r, "CSRF token invalid")
 		return
@@ -65,7 +65,8 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	l.Logger.Debug("Post created", slog.String("post_id", post.ID))
+	logger.AddToContext("post_id", post.ID)
+	logger.Debug("Post created")
 
 	server.Render(w, r, components.Post(&models.Post{
 		Title: post.Title,

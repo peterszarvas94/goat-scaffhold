@@ -5,8 +5,11 @@ WHERE id = ?;
 
 -- name: ListSessions :many
 SELECT *
-FROM session
-ORDER BY name;
+FROM session;
+
+-- name: ListSessionIDs :many
+SELECT "id"
+FROM session;
 
 -- name: CreateSession :one
 INSERT INTO session (id, user_id, valid_until)

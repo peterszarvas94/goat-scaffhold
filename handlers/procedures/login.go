@@ -62,7 +62,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	logger.AddToContext("user_id", user.ID)
+	logger.Add("user_id", user.ID)
 
 	sessionId := uuid.New("ses")
 	session, err := queries.CreateSession(context.Background(), models.CreateSessionParams{
@@ -76,7 +76,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	logger.AddToContext("session_id", session.ID)
+	logger.Add("session_id", session.ID)
 
 	csrfToken, err := csrf.AddNewCSRFToken(session.ID)
 	if err != nil {
@@ -84,7 +84,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	logger.AddToContext("csrf_token", csrfToken)
+	logger.Add("csrf_token", csrfToken)
 
 	helpers.SetCookie(&w, session.ID)
 

@@ -65,7 +65,7 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	logger.AddToContext("post_id", post.ID)
+	logger.Add("post_id", post.ID)
 	logger.Debug("Post created")
 
 	server.Render(w, r, components.Post(&models.Post{

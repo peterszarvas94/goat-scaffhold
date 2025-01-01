@@ -36,7 +36,7 @@ func CSRF(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		logger.AddToContext("csrf_token", csrfToken)
+		logger.Add("csrf_token", csrfToken)
 
 		items := ctx.KV{"csrf_token": &csrfToken}
 		r = ctx.AddToContext(r, items)

@@ -39,7 +39,7 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	logger.AddToContext("session_id", cookie.Value)
+	logger.Add("session_id", cookie.Value)
 
 	helpers.ResetCookie(&w)
 

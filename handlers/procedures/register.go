@@ -83,7 +83,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	logger.AddToContext("user_id", user.ID)
+	logger.Add("user_id", user.ID)
 	logger.Debug("Registered")
 
 	helpers.HxRedirect(w, r, "/login")

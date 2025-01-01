@@ -1,4 +1,5 @@
 templates/**/*_templ.go
+templates/**/*.txt
 .env
 sqlite.db
 dump.sql
@@ -6,3 +7,4 @@ logs/
 main
 go.work
 go.work.sum
+live-reload.lua

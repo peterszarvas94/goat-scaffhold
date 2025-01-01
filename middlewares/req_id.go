@@ -10,7 +10,7 @@ import (
 func RequestID(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		reqID := uuid.New("req")
-		logger.AddToContext("req_id", reqID)
+		logger.Add("req_id", reqID)
 		next(w, r)
 	}
 }

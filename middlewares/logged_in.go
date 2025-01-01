@@ -30,7 +30,7 @@ func LoggedIn(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		logger.AddToContext("session_id", cookie.Value)
+		logger.Add("session_id", cookie.Value)
 
 		queries := models.New(db)
 		session, err := queries.GetSessionByID(context.Background(), cookie.Value)
@@ -65,7 +65,7 @@ func LoggedIn(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		logger.AddToContext("user_id", user.ID)
+		logger.Add("user_id", user.ID)
 
 		items := ctx.KV{
 			"user":    &user,

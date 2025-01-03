@@ -2,12 +2,12 @@ package pages
 
 import (
 	"context"
-	"fmt"
+	"errors"
 	"net/http"
+	"scaffhold/controllers/helpers"
 	"scaffhold/db/models"
-	"scaffhold/handlers/helpers"
-	"scaffhold/templates/components"
-	"scaffhold/templates/pages"
+	"scaffhold/views/components"
+	"scaffhold/views/pages"
 
 	"github.com/peterszarvas94/goat/csrf"
 	"github.com/peterszarvas94/goat/ctx"
@@ -17,37 +17,45 @@ import (
 )
 
 func Index(w http.ResponseWriter, r *http.Request) {
+	reqID, ok := ctx.GetFromCtx[string](r, "req_id")
+	if !ok && reqID == nil {
+		helpers.ServerError(w, r, errors.New("Request id is missing"))
+		return
+	}
+
 	props := &pages.IndexProps{}
 
 	ctxSession, ok := ctx.GetFromCtx[models.Session](r, "session")
 	if !ok || ctxSession == nil {
+		logger.Debug("No session, rendering index", "req_id", *reqID)
 		server.Render(w, r, pages.Index(props), http.StatusOK)
 		return
 	}
 
 	ctxUser, ok := ctx.GetFromCtx[models.User](r, "user")
 	if !ok || ctxUser == nil {
+		logger.Debug("No user, rendering index", "req_id", *reqID)
 		server.Render(w, r, pages.Index(props), http.StatusOK)
 		return
 	}
 
 	csrfToken, err := csrf.GetCSRFToken(ctxSession.ID)
 	if err != nil {
-		fmt.Println(err)
+		logger.Debug("No token, rendering index", "req_id", *reqID)
 		server.Render(w, r, pages.Index(props), http.StatusOK)
 		return
 	}
 
 	db, err := database.Get()
 	if err != nil {
-		helpers.ServerError(w, r, err)
+		helpers.ServerError(w, r, err, "req_id", *reqID)
 		return
 	}
 
 	queries := models.New(db)
 	posts, err := queries.GetPostsByUserId(context.Background(), ctxUser.ID)
 	if err != nil {
-		helpers.ServerError(w, r, err)
+		helpers.ServerError(w, r, err, "req_id", *reqID)
 		return
 	}
 
@@ -63,6 +71,6 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		UserID:    ctxUser.ID,
 	}
 
-	logger.Debug("Index is rendered")
+	logger.Debug("Rendering index", "req_id", *reqID)
 	server.Render(w, r, pages.Index(props), http.StatusOK)
 }

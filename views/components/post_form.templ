@@ -5,13 +5,13 @@ type PostformProps struct {
 	UserID    string
 }
 
+// hx-target-error="#post-error"
+// hx-swap-error="innerHtml"
 templ Postform(props PostformProps) {
 	<form
 		hx-post="/post"
 		hx-target="#posts"
 		hx-swap="beforeend"
-		hx-target-error="#post-error"
-		hx-target-swap="innerHtml"
 	>
 		@TitleInput()
 		@ContentInput()

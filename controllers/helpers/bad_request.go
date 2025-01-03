@@ -8,7 +8,7 @@ import (
 )
 
 func BadRequest(w http.ResponseWriter, r *http.Request, msg string, args ...any) {
-	logger.Error(msg, args...)
+	logger.Warn(msg, args...)
 	w.WriteHeader(http.StatusBadRequest)
 	fmt.Fprintln(w, msg)
 }

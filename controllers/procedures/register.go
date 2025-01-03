@@ -3,11 +3,10 @@ package procedures
 import (
 	"context"
 	"errors"
-	"fmt"
 	"net/http"
 
+	"scaffhold/controllers/helpers"
 	"scaffhold/db/models"
-	"scaffhold/handlers/helpers"
 
 	"github.com/peterszarvas94/goat/ctx"
 	"github.com/peterszarvas94/goat/database"
@@ -16,37 +15,43 @@ import (
 )
 
 func Register(w http.ResponseWriter, r *http.Request) {
+	reqID, ok := ctx.GetFromCtx[string](r, "req_id")
+	if !ok && reqID == nil {
+		helpers.ServerError(w, r, errors.New("Request id is missing"))
+		return
+	}
+
 	ctxUser, ok := ctx.GetFromCtx[models.User](r, "user")
 	if ok && ctxUser != nil {
 		// if logged in, redirect to index page
-		helpers.HxRedirect(w, r, "/")
+		logger.Debug("Not even logged in", "req_id", *reqID)
+		helpers.HxRedirect(w, r, "/", "req_id", *reqID)
 		return
 	}
 
 	name := r.FormValue("name")
 	if name == "" {
-		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintln(w, "Name is empty")
+		helpers.BadRequest(w, r, "Name can not be empty", "req_id", reqID)
 		return
 	}
 
 	email := r.FormValue("email")
 	if email == "" {
-		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintln(w, "Email is empty")
+		helpers.BadRequest(w, r, "Email can not be empty", "req_id", reqID)
 		return
 	}
 
 	password := r.FormValue("password")
 	if password == "" {
-		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintln(w, "Password is empty")
+		helpers.BadRequest(w, r, "Password can not be empty", "req_id", reqID)
 		return
 	}
 
+	// TODO: has password
+
 	db, err := database.Get()
 	if err != nil {
-		helpers.ServerError(w, r, err)
+		helpers.ServerError(w, r, err, "req_id", *reqID)
 		return
 	}
 
@@ -56,22 +61,20 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	// user conflict
 	if err == nil {
 		if existing.Name == name {
-			w.WriteHeader(http.StatusConflict)
-			fmt.Fprintf(w, "Name already in use")
+			helpers.Conflict(w, r, "Name already in use", "req_id", *reqID)
 			return
 		}
 
 		if existing.Email == email {
-			w.WriteHeader(http.StatusConflict)
-			fmt.Fprintf(w, "Email already in use")
+			helpers.Conflict(w, r, "Email already in use", "req_id", *reqID)
 			return
 		}
 
-		helpers.ServerError(w, r, errors.New("Unexpected error"))
+		helpers.ServerError(w, r, errors.New("Conflict"), "req_id", *reqID)
 		return
 	}
 
-	user, err := queries.CreateUser(context.Background(), models.CreateUserParams{
+	_, err = queries.CreateUser(context.Background(), models.CreateUserParams{
 		ID:       uuid.New("usr"),
 		Name:     name,
 		Email:    email,
@@ -79,12 +82,10 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if err != nil {
-		helpers.ServerError(w, r, err)
+		helpers.ServerError(w, r, err, "req_id", *reqID)
 		return
 	}
 
-	logger.Add("user_id", user.ID)
-	logger.Debug("Registered")
-
-	helpers.HxRedirect(w, r, "/login")
+	logger.Debug("Registered", "req_id", *reqID)
+	helpers.HxRedirect(w, r, "/login", "req_id", *reqID)
 }

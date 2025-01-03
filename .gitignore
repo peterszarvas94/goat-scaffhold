@@ -1,5 +1,5 @@
-templates/**/*_templ.go
-templates/**/*.txt
+views/**/*_templ.go
+views/**/*.txt
 .env
 sqlite.db
 dump.sql

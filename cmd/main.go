@@ -5,11 +5,11 @@ import (
 	"os"
 
 	"scaffhold/config"
+	"scaffhold/controllers/middlewares"
+	"scaffhold/controllers/pages"
+	"scaffhold/controllers/procedures"
 	"scaffhold/db/models"
-	"scaffhold/handlers/pages"
-	"scaffhold/handlers/procedures"
-	"scaffhold/middlewares"
-	pageTemplates "scaffhold/templates/pages"
+	pageViews "scaffhold/views/pages"
 
 	_ "github.com/joho/godotenv/autoload"
 	"github.com/peterszarvas94/goat/csrf"
@@ -60,9 +60,11 @@ func main() {
 
 	router.Favicon("favicon.ico")
 
+	router.Static("/static/", "static")
+
 	router.Use(middlewares.Cache, middlewares.RequestID)
 
-	router.TemplGet("/", pageTemplates.NotFound())
+	router.TemplGet("/", pageViews.NotFound())
 	router.Get("/{$}", pages.Index, middlewares.LoggedIn)
 	router.Get("/register", pages.Register, middlewares.LoggedIn)
 	router.Get("/login", pages.Login, middlewares.LoggedIn)

@@ -21,7 +21,7 @@ import (
 )
 
 func main() {
-	// set up log.Logger
+	// set up logger
 	err := logger.Setup("logs", "server-logs", config.LogLevel)
 	if err != nil {
 		os.Exit(1)
@@ -60,7 +60,8 @@ func main() {
 
 	router.Favicon("favicon.ico")
 
-	router.Static("/static/", "static")
+	router.Static("/scripts/", "./scripts")
+	router.Static("/styles/", "./styles")
 
 	router.Use(middlewares.Cache, middlewares.RequestID)
 

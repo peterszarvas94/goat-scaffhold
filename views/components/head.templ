@@ -12,21 +12,13 @@ templ Head(page string) {
 		<title>scaffhold</title>
 		// <link rel="icon" href="favicon.ico" type="image/x-icon"/> <!-- Favicon -->
 		<!--js-->
-		<script src="https://unpkg.com/htmx.org@2.0.3"></script>
-		<script src="https://unpkg.com/htmx-ext-response-targets@2.0.0/response-targets.js"></script>
-		<script src="https://unpkg.com/htmx-ext-head-support@2.0.1/head-support.js"></script>
-		<script>htmx.logAll()</script>
-		<script src="/static/test.js" defer></script>
-		// <script src="script.js" defer></script>
+		<script src="/scripts/node_modules/htmx.org/dist/htmx.js"></script>
+		<script src="/scripts/node_modules/htmx.org/dist/ext/response-targets.js"></script>
+		<script src="/scripts/node_modules/htmx.org/dist/ext/head-support.js"></script>
+		<script src="/scripts/src/htmx-extensions.js"></script>
 		<!--css-->
 		<link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"/>
-		<style type="text/css">
-			body {
-				max-width: 500px;
-				width: 100%;
-				margin: 0 auto;
-			}
-		</style>
+		<link rel="stylesheet" href="/styles/global.css"/>
 		@Style(page)
 	</head>
 }

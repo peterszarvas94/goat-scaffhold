@@ -8,3 +8,5 @@ main
 go.work
 go.work.sum
 live-reload.lua
+scripts/node_modules
+tmp/

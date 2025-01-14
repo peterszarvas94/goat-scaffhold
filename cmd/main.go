@@ -49,7 +49,6 @@ func main() {
 
 	err = csrf.Setup(sessionIDs)
 	if err != nil {
-		logger.Error(err.Error())
 		os.Exit(1)
 	}
 
@@ -63,17 +62,17 @@ func main() {
 	router.Static("/scripts/", "./scripts")
 	router.Static("/styles/", "./styles")
 
-	router.Use(middlewares.Cache, middlewares.RequestID)
+	router.Use(middlewares.Cache, middlewares.AddReqID)
 
 	router.TemplGet("/", pageViews.NotFound())
-	router.Get("/{$}", pages.Index, middlewares.LoggedIn)
-	router.Get("/register", pages.Register, middlewares.LoggedIn)
-	router.Get("/login", pages.Login, middlewares.LoggedIn)
+	router.Get("/{$}", pages.Index, middlewares.IsLoggedIn)
+	router.Get("/register", pages.Register, middlewares.IsLoggedIn)
+	router.Get("/login", pages.Login, middlewares.IsLoggedIn)
 
-	router.Post("/register", procedures.Register, middlewares.LoggedIn)
-	router.Post("/login", procedures.Login, middlewares.LoggedIn)
-	router.Post("/logout", procedures.Logout, middlewares.LoggedIn)
-	router.Post("/post", procedures.CreatePost, middlewares.LoggedIn, middlewares.CSRF)
+	router.Post("/register", procedures.Register, middlewares.IsLoggedIn)
+	router.Post("/login", procedures.Login, middlewares.IsLoggedIn)
+	router.Post("/logout", procedures.Logout, middlewares.IsLoggedIn)
+	router.Post("/post", procedures.CreatePost, middlewares.IsLoggedIn, middlewares.ValidateCsrf)
 
 	s := server.NewServer(router, url)
 

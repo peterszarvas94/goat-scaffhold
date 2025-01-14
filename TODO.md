@@ -10,3 +10,4 @@
 - [ ] email verification
 - [ ] profile page to change name / email / password
 - [ ] better styling
+- [ ] fix js with import map + node_module sync? or idk check rails

@@ -7,7 +7,7 @@ import (
 	"github.com/peterszarvas94/goat/uuid"
 )
 
-func RequestID(next http.HandlerFunc) http.HandlerFunc {
+func AddReqID(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		reqID := uuid.New("req")
 

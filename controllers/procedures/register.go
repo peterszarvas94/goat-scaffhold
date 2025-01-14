@@ -8,24 +8,22 @@ import (
 	"scaffhold/controllers/helpers"
 	"scaffhold/db/models"
 
-	"github.com/peterszarvas94/goat/ctx"
 	"github.com/peterszarvas94/goat/database"
 	"github.com/peterszarvas94/goat/logger"
 	"github.com/peterszarvas94/goat/uuid"
 )
 
 func Register(w http.ResponseWriter, r *http.Request) {
-	reqID, ok := ctx.GetFromCtx[string](r, "req_id")
-	if !ok && reqID == nil {
-		helpers.ServerError(w, r, errors.New("Request id is missing"))
+	reqID, err := helpers.CheckReqID(r)
+	if err != nil {
+		helpers.ServerError(w, r, err)
 		return
 	}
 
-	ctxUser, ok := ctx.GetFromCtx[models.User](r, "user")
-	if ok && ctxUser != nil {
-		// if logged in, redirect to index page
-		logger.Debug("Not even logged in", "req_id", *reqID)
-		helpers.HxRedirect(w, r, "/", "req_id", *reqID)
+	_, _, err = helpers.CheckLoggedIn(r)
+	if err == nil {
+		// already logged in
+		helpers.HxRedirect(w, r, "/", "req_id", reqID)
 		return
 	}
 
@@ -51,7 +49,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 	db, err := database.Get()
 	if err != nil {
-		helpers.ServerError(w, r, err, "req_id", *reqID)
+		helpers.ServerError(w, r, err, "req_id", reqID)
 		return
 	}
 
@@ -61,16 +59,16 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	// user conflict
 	if err == nil {
 		if existing.Name == name {
-			helpers.Conflict(w, r, "Name already in use", "req_id", *reqID)
+			helpers.Conflict(w, r, "Name already in use", "req_id", reqID)
 			return
 		}
 
 		if existing.Email == email {
-			helpers.Conflict(w, r, "Email already in use", "req_id", *reqID)
+			helpers.Conflict(w, r, "Email already in use", "req_id", reqID)
 			return
 		}
 
-		helpers.ServerError(w, r, errors.New("Conflict"), "req_id", *reqID)
+		helpers.ServerError(w, r, errors.New("Conflict"), "req_id", reqID)
 		return
 	}
 
@@ -82,10 +80,10 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if err != nil {
-		helpers.ServerError(w, r, err, "req_id", *reqID)
+		helpers.ServerError(w, r, err, "req_id", reqID)
 		return
 	}
 
-	logger.Debug("Registered", "req_id", *reqID)
-	helpers.HxRedirect(w, r, "/login", "req_id", *reqID)
+	logger.Debug("Registered", "req_id", reqID)
+	helpers.HxRedirect(w, r, "/login", "req_id", reqID)
 }

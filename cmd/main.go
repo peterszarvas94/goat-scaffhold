@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"scaffhold/config"
-	"scaffhold/controllers/middlewares"
+	. "scaffhold/controllers/middlewares"
 	"scaffhold/controllers/pages"
 	"scaffhold/controllers/procedures"
 	"scaffhold/db/models"
@@ -62,17 +62,17 @@ func main() {
 	router.Static("/scripts/", "./scripts")
 	router.Static("/styles/", "./styles")
 
-	router.Use(middlewares.Cache, middlewares.AddReqID)
+	router.Use(Cache, AddReqID)
 
 	router.TemplGet("/", pageViews.NotFound())
-	router.Get("/{$}", pages.Index, middlewares.IsLoggedIn)
-	router.Get("/register", pages.Register, middlewares.IsLoggedIn)
-	router.Get("/login", pages.Login, middlewares.IsLoggedIn)
+	router.Get("/{$}", pages.Index, IsLoggedIn)
+	router.Get("/register", pages.Register, IsLoggedIn)
+	router.Get("/login", pages.Login, IsLoggedIn)
 
-	router.Post("/register", procedures.Register, middlewares.IsLoggedIn)
-	router.Post("/login", procedures.Login, middlewares.IsLoggedIn)
-	router.Post("/logout", procedures.Logout, middlewares.IsLoggedIn)
-	router.Post("/post", procedures.CreatePost, middlewares.IsLoggedIn, middlewares.ValidateCsrf)
+	router.Post("/register", procedures.Register, IsLoggedIn)
+	router.Post("/login", procedures.Login, IsLoggedIn)
+	router.Post("/logout", procedures.Logout, IsLoggedIn)
+	router.Post("/post", procedures.CreatePost, IsLoggedIn, ValidateCsrf)
 
 	s := server.NewServer(router, url)
 

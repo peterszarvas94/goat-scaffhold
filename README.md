@@ -4,7 +4,8 @@ This is a scaffhold which is used for the [GOAT project](https://github.com/pete
 
 ## Commands
 
-- `make live`: start the dev server
+- `goat mig:up`: create db
+- `make dev`: start the dev server
 - `make dump`: dump db data
-- `build`: build the binary
-- `run`: run the binary
+- `make build`: build the binary
+- `make run`: run the binary

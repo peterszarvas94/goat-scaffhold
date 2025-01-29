@@ -9,6 +9,7 @@ import (
 	"scaffhold/db/models"
 
 	"github.com/peterszarvas94/goat/database"
+	"github.com/peterszarvas94/goat/hash"
 	"github.com/peterszarvas94/goat/logger"
 	"github.com/peterszarvas94/goat/uuid"
 )
@@ -45,7 +46,11 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// TODO: has password
+	hashed, err := hash.HashPassword(password)
+	if err != nil {
+		helpers.ServerError(w, r, err, "req_id", reqID)
+		return
+	}
 
 	db, err := database.Get()
 	if err != nil {
@@ -76,7 +81,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		ID:       uuid.New("usr"),
 		Name:     name,
 		Email:    email,
-		Password: password,
+		Password: hashed,
 	})
 
 	if err != nil {

@@ -7,12 +7,12 @@ import (
 
 func SetCookie(w *http.ResponseWriter, sessionID string) {
 	secure := true
-	if config.Vars.Env == "dev" {
+	if config.Vars.GoatEnv == "dev" {
 		secure = false
 	}
 
 	httponly := true
-	if config.Vars.Env == "dev" {
+	if config.Vars.GoatEnv == "dev" {
 		httponly = false
 	}
 

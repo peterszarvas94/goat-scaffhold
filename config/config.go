@@ -10,9 +10,9 @@ var (
 )
 
 type envT struct {
-	DbPath string
-	Env    string
-	Port   string
+	DbPath  string
+	GoatEnv string
+	Port    string
 }
 
 var Vars envT

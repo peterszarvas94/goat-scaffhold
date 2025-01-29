@@ -18,11 +18,6 @@ INSERT INTO user (id, name, email, password)
 VALUES (?, ?, ?, ?)
 RETURNING id, name, email;
 
--- name: Login :one
-SELECT id, email, name
-FROM user
-WHERE email = ? AND password = ?;
-
 -- name: UpdateUser :one
 UPDATE user
 SET name = ?, email = ?, password = ?

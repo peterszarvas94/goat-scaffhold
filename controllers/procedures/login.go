@@ -10,6 +10,7 @@ import (
 
 	"github.com/peterszarvas94/goat/csrf"
 	"github.com/peterszarvas94/goat/database"
+	"github.com/peterszarvas94/goat/hash"
 	"github.com/peterszarvas94/goat/logger"
 	"github.com/peterszarvas94/goat/uuid"
 )
@@ -52,14 +53,15 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	queries := models.New(db)
-	user, err := queries.Login(context.Background(), models.LoginParams{
-		Email:    email,
-		Password: password,
-	})
-
+	user, err := queries.GetUserByEmail(context.Background(), email)
 	if err != nil {
-		// wrong credentials
-		helpers.Unauthorized(w, r, "Wrong credentials", "req_id", reqID)
+		helpers.Unauthorized(w, r, "User with this email not found", "req_id", reqID)
+		return
+	}
+
+	valid := hash.VerifyPassword(password, user.Password)
+	if !valid {
+		helpers.Unauthorized(w, r, "Bad credentials", "req_id", reqID)
 		return
 	}
 

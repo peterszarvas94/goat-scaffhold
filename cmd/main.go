@@ -53,7 +53,7 @@ func main() {
 	}
 
 	// set up server
-	url := server.NewLocalHostUrl(config.Port)
+	url := server.NewLocalHostUrl(config.Vars.Port)
 
 	router := server.NewRouter()
 

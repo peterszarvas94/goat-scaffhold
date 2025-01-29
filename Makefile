@@ -1,20 +1,35 @@
-live/templ:
-	templ generate --watch --proxy="http://localhost:9999" --open-browser=false -v
+# Load environment variables from .env file
+ifneq (,$(wildcard ./.env))
+    include .env
+    export
+endif
 
-live/server:
+# default env values
+DBPATH ?= sqlite.db
+ENV ?= dev
+PORT ?= 9999
+
+# dev serve
+dev/templ:
+	templ generate --watch --proxy="http://localhost:$(PORT)" --open-browser=false -v
+
+dev/server:
 	air -c .air.server.toml
 
-live/assets:
+dev/assets:
 	air -c .air.assets.toml
 
-live:
-	make -j3 live/templ live/server live/assets
+dev:
+	make -j3 dev/templ dev/server dev/assets
 
+# dump db
 dump:
-	sqlite3 sqlite.db .dump > ./dump.sql
+	sqlite3 $(DBPATH) .dump > ./dump.sql
 
+# build binary
 build:
 	go build -o tmp/main cmd/main.go
 
+# run binary
 run:
 	tmp/main

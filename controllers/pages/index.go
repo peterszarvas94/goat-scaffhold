@@ -25,7 +25,8 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
 	ctxUser, ctxSession, err := helpers.CheckLoggedIn(r)
 	if err != nil {
-		helpers.ServerError(w, r, err, "req_id", reqID)
+		logger.Debug("Rendering index", "req_id", reqID)
+		server.Render(w, r, pages.Index(props), http.StatusOK)
 		return
 	}
 

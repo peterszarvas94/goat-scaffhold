@@ -6,13 +6,13 @@ import (
 
 var (
 	AppName  = "scaffhold"
-	Port     = "9999"
 	LogLevel = slog.LevelDebug
 )
 
 type envT struct {
 	DbPath string
 	Env    string
+	Port   string
 }
 
 var Vars envT

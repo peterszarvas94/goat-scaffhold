@@ -1,5 +1,6 @@
 # TODO
 
+- [x] config port != live reload templ port
 - [ ] no plaintext passwords
 - [x] session timeout
 - [x] post mvc

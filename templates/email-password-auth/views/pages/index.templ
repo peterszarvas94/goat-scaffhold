@@ -21,17 +21,17 @@ templ Index(props *IndexProps) {
 			if props.UserinfoProps != nil && props.PostformProps != nil {
 				@components.Userinfo(*props.UserinfoProps)
 				@components.Postform(*props.PostformProps)
+				<section>
+					<h2>Posts</h2>
+					<ul id="posts">
+						for _, post := range props.Posts {
+							@components.Post(&post)
+						}
+					</ul>
+				</section>
 			} else {
 				<a href="/login" hx-boost="true">Login</a>
 			}
-			<section>
-				<h2>Posts</h2>
-				<ul id="posts">
-					for _, post := range props.Posts {
-						@components.Post(&post)
-					}
-				</ul>
-			</section>
 		</body>
 	}
 }

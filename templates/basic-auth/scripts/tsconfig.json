@@ -6,7 +6,7 @@
   },
   "baseUrl": ".",
   "include": [
-    "../scripts/**/*.js",
-    "../scripts/**/*.ts"
+    "./**/*.js",
+    "./**/*.ts"
   ]
 }

@@ -1,4 +1,4 @@
-// this file is needed so I can use htmx types
+// this file is needed so we can use types
 import * as h from "./htmx/htmx";
 
 declare global {

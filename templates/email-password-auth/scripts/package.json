@@ -1,0 +1,13 @@
+{
+  "name": "htmx-extensions",
+  "version": "1.0.0",
+  "main": "htmx-extensions.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "htmx.org": "^1.9.12"
+  }
+}

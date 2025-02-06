@@ -1,0 +1,13 @@
+package pages
+
+import (
+	"fmt"
+	"scaffhold/config"
+	"scaffhold/views/layouts"
+)
+
+templ Index() {
+	@layouts.Page("index") {
+		<h1>{ fmt.Sprintf("Welcome to %s", config.AppName) }</h1>
+	}
+}

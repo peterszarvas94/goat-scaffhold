@@ -1,5 +1,5 @@
 [build]
-bin = "echo 0"
+bin = ""
 cmd = "templ generate --notify-proxy"
 delay = 100
 include_dir = ["scripts", "styles"]

@@ -1,0 +1,15 @@
+package partial 
+
+templ Partial(partialName, componentName string) {
+	if partialName == "" || partialName  == componentName {
+		<div id="componentName">
+			{ children... }
+		</div>
+	}
+}
+
+templ Full(partialName string) {
+	if partialName == "" {
+		{ children... }
+	}
+}

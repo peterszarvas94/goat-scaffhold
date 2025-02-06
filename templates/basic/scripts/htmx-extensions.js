@@ -2,7 +2,7 @@
 
 htmx.logAll();
 
-/** @type {import("htmx.org/dist/htmx").HtmxExtension} */
+/** @type {import("./htmx/htmx").HtmxExtension} */
 const myExtension = {
   onEvent: function (name, evt) {
     console.log("Fired event: " + name, evt);

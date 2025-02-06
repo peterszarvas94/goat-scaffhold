@@ -5,11 +5,6 @@
     "noEmit": true
   },
   "baseUrl": ".",
-  "paths": {
-    "htmx": [
-      "node_modules/htmx.org/dist/htmx"
-    ]
-  },
   "include": [
     "../scripts/**/*.js",
     "../scripts/**/*.ts"

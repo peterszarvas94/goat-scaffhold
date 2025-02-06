@@ -11,7 +11,6 @@ import (
 	"scaffhold/db/models"
 	pageViews "scaffhold/views/pages"
 
-	_ "github.com/joho/godotenv/autoload"
 	"github.com/peterszarvas94/goat/csrf"
 	"github.com/peterszarvas94/goat/database"
 	"github.com/peterszarvas94/goat/env"

@@ -8,7 +8,6 @@ import (
 	"scaffhold/controllers/pages"
 	pageViews "scaffhold/views/pages"
 
-	_ "github.com/joho/godotenv/autoload"
 	"github.com/peterszarvas94/goat/env"
 	"github.com/peterszarvas94/goat/logger"
 	"github.com/peterszarvas94/goat/server"

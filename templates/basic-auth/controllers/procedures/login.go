@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"scaffhold/controllers/helpers"
+	"scaffhold/config"
 	"scaffhold/db/models"
 
 	"github.com/peterszarvas94/goat/csrf"
@@ -14,49 +14,50 @@ import (
 	"github.com/peterszarvas94/goat/database"
 	"github.com/peterszarvas94/goat/hash"
 	"github.com/peterszarvas94/goat/logger"
+	"github.com/peterszarvas94/goat/request"
 	"github.com/peterszarvas94/goat/uuid"
 )
 
 func Login(w http.ResponseWriter, r *http.Request) {
 	reqID, ok := ctx.Get[string](r, "req_id")
 	if reqID == nil || !ok {
-		helpers.ServerError(w, r, errors.New("Request ID is missing"))
+		request.ServerError(w, r, errors.New("Request ID is missing"))
 		return
 	}
 
 	if err := r.ParseForm(); err != nil {
-		helpers.ServerError(w, r, err, "req_id", reqID)
+		request.ServerError(w, r, err, "req_id", reqID)
 		return
 	}
 
 	email := r.FormValue("email")
 	if email == "" {
-		helpers.BadRequest(w, r, errors.New("Email can not be empty"), "req_id", reqID)
+		request.BadRequest(w, r, errors.New("Email can not be empty"), "req_id", reqID)
 		return
 	}
 
 	password := r.FormValue("password")
 	if password == "" {
-		helpers.BadRequest(w, r, errors.New("Password can not be empty"), "req_id", reqID)
+		request.BadRequest(w, r, errors.New("Password can not be empty"), "req_id", reqID)
 		return
 	}
 
 	db, err := database.Get()
 	if err != nil {
-		helpers.ServerError(w, r, err, "req_id", reqID)
+		request.ServerError(w, r, err, "req_id", reqID)
 		return
 	}
 
 	queries := models.New(db)
 	user, err := queries.GetUserByEmail(context.Background(), email)
 	if err != nil {
-		helpers.Unauthorized(w, r, errors.New("User with this email not found"), "req_id", reqID)
+		request.Unauthorized(w, r, errors.New("User with this email not found"), "req_id", reqID)
 		return
 	}
 
 	valid := hash.VerifyPassword(password, user.Password)
 	if !valid {
-		helpers.Unauthorized(w, r, errors.New("Bad credentials"), "req_id", reqID)
+		request.Unauthorized(w, r, errors.New("Bad credentials"), "req_id", reqID)
 		return
 	}
 
@@ -70,7 +71,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if err != nil {
-		helpers.ServerError(w, r, err, "req_id", reqID)
+		request.ServerError(w, r, err, "req_id", reqID)
 		return
 	}
 
@@ -78,12 +79,32 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	_, err = csrf.AddNewCSRFToken(session.ID)
 	if err != nil {
-		helpers.ServerError(w, r, err, "req_id", reqID)
+		request.ServerError(w, r, err, "req_id", reqID)
 		return
 	}
 
-	helpers.SetCookie(&w, session.ID)
+	secure := true
+	if config.Vars.GoatEnv == "dev" {
+		secure = false
+	}
+
+	httponly := true
+	if config.Vars.GoatEnv == "dev" {
+		httponly = false
+	}
+
+	cookie := &http.Cookie{
+		Name:     "sessionToken",
+		Value:    session.ID,
+		Path:     "/",
+		HttpOnly: httponly,
+		SameSite: http.SameSiteLaxMode,
+		Secure:   secure,
+		MaxAge:   3600,
+	}
+
+	http.SetCookie(w, cookie)
 
 	logger.Debug("Logged in", "req_id", reqID)
-	helpers.HxRedirect(w, r, "/", "req_id", reqID)
+	request.HxRedirect(w, r, "/", "req_id", reqID)
 }

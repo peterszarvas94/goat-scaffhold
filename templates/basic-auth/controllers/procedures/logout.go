@@ -4,25 +4,25 @@ import (
 	"context"
 	"errors"
 	"net/http"
-	"scaffhold/controllers/helpers"
 	"scaffhold/db/models"
 
 	"github.com/peterszarvas94/goat/csrf"
 	"github.com/peterszarvas94/goat/ctx"
 	"github.com/peterszarvas94/goat/database"
 	"github.com/peterszarvas94/goat/logger"
+	"github.com/peterszarvas94/goat/request"
 )
 
 func Logout(w http.ResponseWriter, r *http.Request) {
 	reqID, ok := ctx.Get[string](r, "req_id")
 	if reqID == nil || !ok {
-		helpers.ServerError(w, r, errors.New("Request ID is missing"))
+		request.ServerError(w, r, errors.New("Request ID is missing"))
 		return
 	}
 
 	cookie, err := r.Cookie("sessionToken")
 	if err != nil {
-		helpers.ServerError(w, r, err, "req_id", reqID)
+		request.ServerError(w, r, err, "req_id", reqID)
 		return
 	}
 
@@ -30,21 +30,21 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 
 	db, err := database.Get()
 	if err != nil {
-		helpers.ServerError(w, r, err, "req_id", reqID)
+		request.ServerError(w, r, err, "req_id", reqID)
 		return
 	}
 
 	queries := models.New(db)
 	err = queries.DeleteSession(context.Background(), cookie.Value)
 	if err != nil {
-		helpers.ServerError(w, r, err, "req_id", reqID)
+		request.ServerError(w, r, err, "req_id", reqID)
 		return
 	}
 
-	helpers.ResetCookie(&w)
+	request.ResetCookie(&w, "sessionToken")
 
-	csrf.DeleteCSRFToken(cookie.Value)
+	csrf.Delete(cookie.Value)
 
 	logger.Debug("Logged out", "req_id", reqID)
-	helpers.HxRedirect(w, r, "/", "req_id", reqID)
+	request.HxRedirect(w, r, "/", "req_id", reqID)
 }

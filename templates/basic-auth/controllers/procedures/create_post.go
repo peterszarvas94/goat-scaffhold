@@ -4,13 +4,13 @@ import (
 	"context"
 	"errors"
 	"net/http"
-	"scaffhold/controllers/helpers"
 	"scaffhold/db/models"
 	"scaffhold/views/components"
 
 	"github.com/peterszarvas94/goat/ctx"
 	"github.com/peterszarvas94/goat/database"
 	"github.com/peterszarvas94/goat/logger"
+	"github.com/peterszarvas94/goat/request"
 	"github.com/peterszarvas94/goat/server"
 	"github.com/peterszarvas94/goat/uuid"
 )
@@ -18,38 +18,38 @@ import (
 func CreatePost(w http.ResponseWriter, r *http.Request) {
 	reqID, ok := ctx.Get[string](r, "req_id")
 	if reqID == nil || !ok {
-		helpers.ServerError(w, r, errors.New("Request ID is missing"))
+		request.ServerError(w, r, errors.New("Request ID is missing"))
 		return
 	}
 
 	ctxUser, ok := ctx.Get[models.User](r, "user")
 	if !ok || ctxUser == nil {
-		helpers.ServerError(w, r, errors.New("User is missing"), "req_id", *reqID)
+		request.ServerError(w, r, errors.New("User is missing"), "req_id", *reqID)
 		return
 	}
 
 	if err := r.ParseForm(); err != nil {
-		helpers.ServerError(w, r, err, "req_id", *reqID)
+		request.ServerError(w, r, err, "req_id", *reqID)
 		return
 	}
 
 	title := r.FormValue("title")
 	if title == "" {
-		helpers.HxReswap(w, "innerHTML")
-		helpers.BadRequest(w, r, errors.New("Title can not be empty"), "req_id", *reqID)
+		request.HxReswap(w, "innerHTML")
+		request.BadRequest(w, r, errors.New("Title can not be empty"), "req_id", *reqID)
 		return
 	}
 
 	content := r.FormValue("content")
 	if content == "" {
-		helpers.HxReswap(w, "innerHTML")
-		helpers.BadRequest(w, r, errors.New("Content can not be empty"), "req_id", *reqID)
+		request.HxReswap(w, "innerHTML")
+		request.BadRequest(w, r, errors.New("Content can not be empty"), "req_id", *reqID)
 		return
 	}
 
 	db, err := database.Get()
 	if err != nil {
-		helpers.ServerError(w, r, err, "req_id", *reqID)
+		request.ServerError(w, r, err, "req_id", *reqID)
 		return
 	}
 
@@ -63,7 +63,7 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if err != nil {
-		helpers.ServerError(w, r, err, "req_id", *reqID)
+		request.ServerError(w, r, err, "req_id", *reqID)
 		return
 	}
 

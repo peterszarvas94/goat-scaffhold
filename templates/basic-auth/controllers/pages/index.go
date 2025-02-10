@@ -13,13 +13,14 @@ import (
 	"github.com/peterszarvas94/goat/ctx"
 	"github.com/peterszarvas94/goat/database"
 	"github.com/peterszarvas94/goat/logger"
+	"github.com/peterszarvas94/goat/request"
 	"github.com/peterszarvas94/goat/server"
 )
 
 func Index(w http.ResponseWriter, r *http.Request) {
 	reqID, ok := ctx.Get[string](r, "req_id")
 	if reqID == nil || !ok {
-		helpers.ServerError(w, r, errors.New("Request ID is missing"))
+		request.ServerError(w, r, errors.New("Request ID is missing"))
 		return
 	}
 
@@ -33,22 +34,22 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	csrfToken, err := csrf.GetCSRFToken(ctxSession.ID)
+	csrfToken, err := csrf.Get(ctxSession.ID)
 	if err != nil {
-		helpers.ServerError(w, r, err, "req_id", *reqID)
+		request.ServerError(w, r, err, "req_id", *reqID)
 		return
 	}
 
 	db, err := database.Get()
 	if err != nil {
-		helpers.ServerError(w, r, err, "req_id", *reqID)
+		request.ServerError(w, r, err, "req_id", *reqID)
 		return
 	}
 
 	queries := models.New(db)
 	posts, err := queries.GetPostsByUserId(context.Background(), ctxUser.ID)
 	if err != nil {
-		helpers.ServerError(w, r, err, "req_id", *reqID)
+		request.ServerError(w, r, err, "req_id", *reqID)
 		return
 	}
 

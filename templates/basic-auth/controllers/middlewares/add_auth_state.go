@@ -3,7 +3,6 @@ package middlewares
 import (
 	"context"
 	"net/http"
-	"scaffhold/controllers/helpers"
 	"scaffhold/db/models"
 	"time"
 
@@ -11,13 +10,14 @@ import (
 	"github.com/peterszarvas94/goat/ctx"
 	"github.com/peterszarvas94/goat/database"
 	"github.com/peterszarvas94/goat/logger"
+	"github.com/peterszarvas94/goat/request"
 )
 
 func AddAuthState(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		db, err := database.Get()
 		if err != nil {
-			helpers.ServerError(w, r, err)
+			request.ServerError(w, r, err)
 			return
 		}
 
@@ -35,9 +35,9 @@ func AddAuthState(next http.HandlerFunc) http.HandlerFunc {
 		queries := models.New(db)
 		session, err := queries.GetSessionByID(context.Background(), cookie.Value)
 		if err != nil {
-			helpers.ResetCookie(&w)
+			request.ResetCookie(&w, "sessionToken")
 
-			csrf.DeleteCSRFToken(cookie.Value)
+			csrf.Delete(cookie.Value)
 
 			// cookie, but no session -> next
 			logger.Debug("Cookie is found, but no session")
@@ -49,11 +49,11 @@ func AddAuthState(next http.HandlerFunc) http.HandlerFunc {
 
 			err = queries.DeleteSession(context.Background(), session.ID)
 			if err != nil {
-				helpers.ServerError(w, r, err)
+				request.ServerError(w, r, err)
 				return
 			}
 
-			csrf.DeleteCSRFToken(session.ID)
+			csrf.Delete(session.ID)
 			next(w, r)
 			return
 		}
@@ -62,7 +62,7 @@ func AddAuthState(next http.HandlerFunc) http.HandlerFunc {
 
 		user, err := queries.GetUserByID(context.Background(), session.UserID)
 		if err != nil {
-			helpers.ServerError(w, r, err)
+			request.ServerError(w, r, err)
 			return
 		}
 

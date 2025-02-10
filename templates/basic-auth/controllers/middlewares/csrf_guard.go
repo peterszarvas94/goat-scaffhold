@@ -4,20 +4,22 @@ import (
 	"errors"
 	"net/http"
 	"scaffhold/controllers/helpers"
+	"scaffhold/db/models"
 
 	"github.com/peterszarvas94/goat/csrf"
 	"github.com/peterszarvas94/goat/ctx"
 )
 
-func ValidateCsrf(next http.HandlerFunc) http.HandlerFunc {
+func CSRFGuard(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		_, ctxSession, err := helpers.CheckLoggedIn(r)
-		if err != nil {
+		ctxSession, ok := ctx.Get[models.Session](r, "session")
+		if !ok || ctxSession == nil {
 			helpers.Unauthorized(w, r, "Not logged in")
 			return
 		}
 
-		if err = r.ParseForm(); err != nil {
+		err := r.ParseForm()
+		if err != nil {
 			helpers.ServerError(w, r, err)
 			return
 		}
@@ -30,11 +32,6 @@ func ValidateCsrf(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		items := ctx.KV{
-			"csrf_token": &csrfToken,
-		}
-
-		r = ctx.AddToContext(r, items)
-		next.ServeHTTP(w, r)
+		next(w, r)
 	}
 }

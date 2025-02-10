@@ -61,17 +61,17 @@ func main() {
 	router.Static("/scripts/", "./scripts")
 	router.Static("/styles/", "./styles")
 
-	router.Use(Cache, AddReqID)
+	router.Use(Cache, AddRequestID, AddAuthState)
 
 	router.TemplGet("/", pageViews.NotFound())
-	router.Get("/{$}", pages.Index, IsLoggedIn)
-	router.Get("/register", pages.Register, IsLoggedIn)
-	router.Get("/login", pages.Login, IsLoggedIn)
+	router.Get("/{$}", pages.Index)
+	router.Get("/register", pages.Register, GuestGuard)
+	router.Get("/login", pages.Login, GuestGuard)
 
-	router.Post("/register", procedures.Register, IsLoggedIn)
-	router.Post("/login", procedures.Login, IsLoggedIn)
-	router.Post("/logout", procedures.Logout, IsLoggedIn)
-	router.Post("/post", procedures.CreatePost, IsLoggedIn, ValidateCsrf)
+	router.Post("/register", procedures.Register, GuestGuard)
+	router.Post("/login", procedures.Login, GuestGuard)
+	router.Post("/logout", procedures.Logout, AuthGuard)
+	router.Post("/post", procedures.CreatePost, AuthGuard, CSRFGuard)
 
 	s := server.NewServer(router, url)
 

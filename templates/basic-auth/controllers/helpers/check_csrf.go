@@ -8,7 +8,7 @@ import (
 )
 
 func CheckCsrf(r *http.Request) (string, error) {
-	csrfToken, ok := ctx.GetFromCtx[string](r, "csrf_token")
+	csrfToken, ok := ctx.Get[string](r, "csrf_token")
 	if !ok || csrfToken == nil {
 		return "", errors.New("CSRF token is missing")
 	}

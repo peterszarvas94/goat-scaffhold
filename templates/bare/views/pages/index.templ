@@ -10,4 +10,6 @@ templ Index() {
 	@layouts.Page("index") {
 		<h1>{ fmt.Sprintf("Welcome to %s", config.AppName) }</h1>
 	}
+	<button hx-get="/ping" hx-target="#pong" hx-swap="beforeend">Ping</button>
+	<div id="pong"></div>
 }

@@ -10,12 +10,11 @@ import (
 func AddReqID(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		reqID := uuid.New("req")
-
 		items := ctx.KV{
 			"req_id": &reqID,
 		}
 
-		r = ctx.AddToContext(r, items)
-		next(w, r)
+		newR := ctx.Add(r, items)
+		next(w, newR)
 	}
 }

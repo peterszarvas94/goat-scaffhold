@@ -8,6 +8,7 @@ import (
 	"scaffhold/controllers/helpers"
 	"scaffhold/db/models"
 
+	"github.com/peterszarvas94/goat/ctx"
 	"github.com/peterszarvas94/goat/database"
 	"github.com/peterszarvas94/goat/hash"
 	"github.com/peterszarvas94/goat/logger"
@@ -15,16 +16,9 @@ import (
 )
 
 func Register(w http.ResponseWriter, r *http.Request) {
-	reqID, err := helpers.CheckReqID(r)
-	if err != nil {
-		helpers.ServerError(w, r, err)
-		return
-	}
-
-	_, _, err = helpers.CheckLoggedIn(r)
-	if err == nil {
-		// already logged in
-		helpers.HxRedirect(w, r, "/", "req_id", reqID)
+	reqID, ok := ctx.Get[string](r, "req_id")
+	if reqID == nil || !ok {
+		helpers.ServerError(w, r, errors.New("Request ID is missing"))
 		return
 	}
 

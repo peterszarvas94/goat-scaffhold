@@ -2,27 +2,21 @@ package procedures
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"scaffhold/controllers/helpers"
 	"scaffhold/db/models"
 
 	"github.com/peterszarvas94/goat/csrf"
+	"github.com/peterszarvas94/goat/ctx"
 	"github.com/peterszarvas94/goat/database"
 	"github.com/peterszarvas94/goat/logger"
 )
 
 func Logout(w http.ResponseWriter, r *http.Request) {
-	reqID, err := helpers.CheckReqID(r)
-	if err != nil {
-		helpers.ServerError(w, r, err)
-		return
-	}
-
-	_, _, err = helpers.CheckLoggedIn(r)
-	if err != nil {
-		// if not logged in, redirect to index page
-		logger.Debug("Not even logged in", "req_id", reqID)
-		helpers.HxRedirect(w, r, "/", "req_id", reqID)
+	reqID, ok := ctx.Get[string](r, "req_id")
+	if reqID == nil || !ok {
+		helpers.ServerError(w, r, errors.New("Request ID is missing"))
 		return
 	}
 

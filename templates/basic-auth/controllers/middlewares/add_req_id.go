@@ -7,7 +7,7 @@ import (
 	"github.com/peterszarvas94/goat/uuid"
 )
 
-func AddReqID(next http.HandlerFunc) http.HandlerFunc {
+func AddRequestID(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		reqID := uuid.New("req")
 
@@ -15,7 +15,7 @@ func AddReqID(next http.HandlerFunc) http.HandlerFunc {
 			"req_id": &reqID,
 		}
 
-		r = ctx.AddToContext(r, items)
+		r = ctx.Add(r, items)
 		next(w, r)
 	}
 }

@@ -12,3 +12,8 @@
 - [ ] profile page to change name / email / password
 - [ ] better styling
 - [ ] fix js with import map + node_module sync? or idk check rails
+
+## logged in status
+
+- [ ] make a helper ValidateSession
+- [ ] make different middlewares: RequireAuth, RequireGuest

@@ -1,6 +1,10 @@
 package components
 
-templ Head(page string) {
+import (
+	"fmt"
+)
+
+templ Head(title string) {
 	<!DOCTYPE html>
 	<head>
 		<!--meta-->
@@ -9,13 +13,14 @@ templ Head(page string) {
 		<meta name="description" content="Page description here"/>
 		<meta name="keywords" content="keywords, related, to, page"/>
 		<meta name="author" content="Author Name"/>
-		<title>scaffhold</title>
+		<title>{ fmt.Sprintf("%s - scaffhold", title) }</title>
 		<!--js-->
 		<script src="/scripts/htmx/htmx.js"></script>
+		<script src="/scripts/htmx/ext/response-targets.js"></script>
+		<script src="/scripts/htmx/ext/head-support.js"></script>
 		<script src="/scripts/htmx-extensions.js"></script>
 		<!--css-->
 		<link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"/>
 		<link rel="stylesheet" href="/styles/global.css"/>
-		@Style(page)
 	</head>
 }

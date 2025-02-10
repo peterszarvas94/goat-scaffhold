@@ -1,0 +1,11 @@
+templates/**/views/**/*_templ.go
+templates/**/views/**/*.txt
+templates/**/.env
+templates/**/sqlite.db
+templates/**/dump.sql
+templates/**/logs/
+templates/**/main
+templates/**/go.work
+templates/**/go.work.sum
+templates/**/scripts/node_modules
+templates/**/tmp/

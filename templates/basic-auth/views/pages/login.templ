@@ -6,14 +6,32 @@ import (
 )
 
 templ Login() {
-	@layouts.Page("login") {
+	@layouts.Page("Login") {
+		<style type="text/css">
+			#login {
+				form {
+					display: flex;
+					flex-direction: column;
+					gap: 1rem;
+
+					div {
+						display: flex;
+						flex-direction: column;
+					}
+
+					button {
+						width: 100%;
+					}
+				}
+			}
+		</style>
 		<section id="login">
 			<h2>Log in</h2>
-			@components.Form("/login", "#login-error") {
+			<form hx-post="/login" hx-target-error="#login-error">
 				@components.EmailInput()
 				@components.PasswordInput()
 				<button type="submit">Submit</button>
-			}
+			</form>
 			<p id="login-error"></p>
 			<a
 				href="/register"

@@ -13,7 +13,6 @@ func GuestGuard(next http.HandlerFunc) http.HandlerFunc {
 			helpers.ServerError(w, r, errors.New("User should not be logged in"))
 			return
 		}
-
 		next(w, r)
 	}
 }

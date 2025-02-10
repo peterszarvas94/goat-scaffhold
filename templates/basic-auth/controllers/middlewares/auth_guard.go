@@ -9,7 +9,7 @@ func AuthGuard(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		_, _, err := helpers.CheckAuthStatus(r)
 		if err != nil {
-			helpers.ServerError(w, r, err)
+			helpers.Unauthorized(w, r, err)
 			return
 		}
 

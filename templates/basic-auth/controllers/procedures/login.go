@@ -31,13 +31,13 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	email := r.FormValue("email")
 	if email == "" {
-		helpers.BadRequest(w, r, "Email can not be empty", "req_id", reqID)
+		helpers.BadRequest(w, r, errors.New("Email can not be empty"), "req_id", reqID)
 		return
 	}
 
 	password := r.FormValue("password")
 	if password == "" {
-		helpers.BadRequest(w, r, "Password can not be empty", "req_id", reqID)
+		helpers.BadRequest(w, r, errors.New("Password can not be empty"), "req_id", reqID)
 		return
 	}
 
@@ -50,13 +50,13 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	queries := models.New(db)
 	user, err := queries.GetUserByEmail(context.Background(), email)
 	if err != nil {
-		helpers.Unauthorized(w, r, "User with this email not found", "req_id", reqID)
+		helpers.Unauthorized(w, r, errors.New("User with this email not found"), "req_id", reqID)
 		return
 	}
 
 	valid := hash.VerifyPassword(password, user.Password)
 	if !valid {
-		helpers.Unauthorized(w, r, "Bad credentials", "req_id", reqID)
+		helpers.Unauthorized(w, r, errors.New("Bad credentials"), "req_id", reqID)
 		return
 	}
 

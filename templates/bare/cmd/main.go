@@ -6,7 +6,7 @@ import (
 	"scaffhold/config"
 	. "scaffhold/controllers/middlewares"
 	"scaffhold/controllers/pages"
-	"scaffhold/controllers/procedures"
+	"scaffhold/views/components"
 	pageViews "scaffhold/views/pages"
 
 	"github.com/peterszarvas94/goat/env"
@@ -42,7 +42,7 @@ func main() {
 
 	router.TemplGet("/", pageViews.NotFound())
 	router.Get("/{$}", pages.Index)
-	router.Get("/ping/{$}", procedures.Ping)
+	router.TemplGet("/ping", components.Pong())
 
 	s := server.NewServer(router, url)
 

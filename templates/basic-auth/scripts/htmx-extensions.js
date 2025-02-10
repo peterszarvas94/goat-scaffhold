@@ -2,10 +2,10 @@
 htmx.logAll();
 
 /** @type {import("./htmx/htmx").HtmxExtension} */
-const myExtension = {
-  onEvent: function (_name, _evt) {
-    // ...
+const swapAll = {
+  onEvent: function (_name, evt) {
+    evt.detail.shouldSwap = true;
   },
 };
 
-htmx.defineExtension("my-ext", myExtension);
+htmx.defineExtension("swap-all", swapAll);

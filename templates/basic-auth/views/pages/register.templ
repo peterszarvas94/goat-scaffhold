@@ -7,14 +7,32 @@ import (
 
 templ Register() {
 	@layouts.Page("register") {
+		<style type="text/css">
+			#register {
+				form {
+					display: flex;
+					flex-direction: column;
+					gap: 1rem;
+
+					div {
+						display: flex;
+						flex-direction: column;
+					}
+
+					button {
+						width: 100%;
+					}
+				}
+			}
+		</style>
 		<section id="register">
 			<h2>Register</h2>
-			@components.Form("/register", "#register-error") {
+			<form hx-post="/register" hx-target-error="#register-error">
 				@components.NameInput()
 				@components.EmailInput()
 				@components.PasswordInput()
 				<button type="submit">Submit</button>
-			}
+			</form>
 			<p id="register-error"></p>
 			<a
 				href="/login"

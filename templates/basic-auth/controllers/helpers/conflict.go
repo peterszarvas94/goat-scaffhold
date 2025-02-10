@@ -7,8 +7,8 @@ import (
 	"github.com/peterszarvas94/goat/logger"
 )
 
-func Conflict(w http.ResponseWriter, r *http.Request, msg string, args ...any) {
-	logger.Error(msg, args...)
+func Conflict(w http.ResponseWriter, r *http.Request, err error, args ...any) {
+	logger.Error(err.Error(), args...)
 	w.WriteHeader(http.StatusConflict)
-	fmt.Fprintln(w, msg)
+	fmt.Fprintln(w, err.Error())
 }

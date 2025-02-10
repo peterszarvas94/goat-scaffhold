@@ -14,7 +14,7 @@ func CSRFGuard(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctxSession, ok := ctx.Get[models.Session](r, "session")
 		if !ok || ctxSession == nil {
-			helpers.Unauthorized(w, r, "Not logged in")
+			helpers.Unauthorized(w, r, errors.New("Not logged in"))
 			return
 		}
 

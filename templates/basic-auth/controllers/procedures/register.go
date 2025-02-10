@@ -24,19 +24,19 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 	name := r.FormValue("name")
 	if name == "" {
-		helpers.BadRequest(w, r, "Name can not be empty", "req_id", reqID)
+		helpers.BadRequest(w, r, errors.New("Name can not be empty"), "req_id", reqID)
 		return
 	}
 
 	email := r.FormValue("email")
 	if email == "" {
-		helpers.BadRequest(w, r, "Email can not be empty", "req_id", reqID)
+		helpers.BadRequest(w, r, errors.New("Email can not be empty"), "req_id", reqID)
 		return
 	}
 
 	password := r.FormValue("password")
 	if password == "" {
-		helpers.BadRequest(w, r, "Password can not be empty", "req_id", reqID)
+		helpers.BadRequest(w, r, errors.New("Password can not be empty"), "req_id", reqID)
 		return
 	}
 
@@ -58,17 +58,14 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	// user conflict
 	if err == nil {
 		if existing.Name == name {
-			helpers.Conflict(w, r, "Name already in use", "req_id", reqID)
+			helpers.Conflict(w, r, errors.New("Name already in use"), "req_id", reqID)
 			return
 		}
 
 		if existing.Email == email {
-			helpers.Conflict(w, r, "Email already in use", "req_id", reqID)
+			helpers.Conflict(w, r, errors.New("Email already in use"), "req_id", reqID)
 			return
 		}
-
-		helpers.ServerError(w, r, errors.New("Conflict"), "req_id", reqID)
-		return
 	}
 
 	_, err = queries.CreateUser(context.Background(), models.CreateUserParams{

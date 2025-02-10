@@ -2,9 +2,9 @@ package layouts
 
 import "scaffhold/views/components"
 
-templ Page(page string) {
-	@components.Head(page)
-	<body hx-ext="response-targets, head-support">
+templ Page(title string) {
+	@components.Head(title)
+	<body hx-ext="swap-all,head-support">
 		{ children... }
 	</body>
 }

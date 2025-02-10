@@ -22,15 +22,9 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ctxUser, _, err := helpers.CheckAuthStatus(r)
-	if err != nil {
-		helpers.ServerError(w, r, err, "req_id", *reqID)
-		return
-	}
-
-	_, err = helpers.CheckCsrf(r)
-	if err != nil {
-		helpers.ServerError(w, r, err, "req_id", *reqID)
+	ctxUser, ok := ctx.Get[models.User](r, "user")
+	if !ok || ctxUser == nil {
+		helpers.ServerError(w, r, errors.New("User is missing"), "req_id", *reqID)
 		return
 	}
 
@@ -41,15 +35,15 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 
 	title := r.FormValue("title")
 	if title == "" {
-		helpers.HxRe(w, "#post-error", "innerHtml")
-		helpers.BadRequest(w, r, "Title can not be empty", "req_id", *reqID)
+		helpers.HxReswap(w, "innerHTML")
+		helpers.BadRequest(w, r, errors.New("Title can not be empty"), "req_id", *reqID)
 		return
 	}
 
 	content := r.FormValue("content")
 	if content == "" {
-		helpers.HxRe(w, "#post-error", "innerHtml")
-		helpers.BadRequest(w, r, "Content can not be empty", "req_id", *reqID)
+		helpers.HxReswap(w, "innerHTML")
+		helpers.BadRequest(w, r, errors.New("Content can not be empty"), "req_id", *reqID)
 		return
 	}
 

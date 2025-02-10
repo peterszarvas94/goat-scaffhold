@@ -16,22 +16,20 @@ type IndexProps struct {
 
 templ Index(props *IndexProps) {
 	@layouts.Page("index") {
-		<body hx-ext="response-targets">
-			<h1>{ fmt.Sprintf("Welcome to %s", config.AppName) }</h1>
-			if props.UserinfoProps != nil && props.PostformProps != nil {
-				@components.Userinfo(*props.UserinfoProps)
-				@components.Postform(*props.PostformProps)
-				<section>
-					<h2>Posts</h2>
-					<ul id="posts">
-						for _, post := range props.Posts {
-							@components.Post(&post)
-						}
-					</ul>
-				</section>
-			} else {
-				<a href="/login" hx-boost="true">Login</a>
-			}
-		</body>
+		<h1>{ fmt.Sprintf("Welcome to %s", config.AppName) }</h1>
+		if props.UserinfoProps != nil && props.PostformProps != nil {
+			@components.Userinfo(*props.UserinfoProps)
+			@components.Postform(*props.PostformProps)
+			<section>
+				<h2>Posts</h2>
+				<ul id="posts">
+					for _, post := range props.Posts {
+						@components.Post(&post)
+					}
+				</ul>
+			</section>
+		} else {
+			<a href="/login" hx-boost="true">Login</a>
+		}
 	}
 }

@@ -1,4 +1,0 @@
-[build]
-bin = true
-cmd = "templ generate --notify-proxy"
-delay = 100

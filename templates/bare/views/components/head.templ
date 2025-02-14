@@ -11,11 +11,18 @@ templ Head(page string) {
 		<meta name="author" content="Author Name"/>
 		<title>scaffhold</title>
 		<!--js-->
-		<script src="/scripts/htmx/htmx.js"></script>
-		<script src="/scripts/htmx/ext/head-support.js"></script>
-		<script src="/scripts/htmx-extensions.js"></script>
+		<script type="importmap">
+			{
+				"imports": {
+					"goaty": "/scripts/pkg/goaty/goaty.js"
+				}
+			}	
+		</script>
+		<script src="/scripts/pkg/htmx/htmx.js"></script>
+		<script src="/scripts/pkg/htmx/ext/head-support.js"></script>
+		<script src="/scripts/src/htmx-extensions.js" type="module"></script>
 		<!--css-->
-		<link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"/>
+		<link rel="stylesheet" href="/styles/simple.css"/>
 		<link rel="stylesheet" href="/styles/global.css"/>
 	</head>
 }

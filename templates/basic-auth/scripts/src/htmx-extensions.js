@@ -1,7 +1,7 @@
 // @ts-check
 htmx.logAll();
 
-/** @type {import("./htmx/htmx").HtmxExtension} */
+/** @type {import("htmx").HtmxExtension} */
 const swapAll = {
   onEvent: function (_name, evt) {
     evt.detail.shouldSwap = true;

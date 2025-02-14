@@ -2,9 +2,17 @@
   "compilerOptions": {
     "checkJs": true,
     "allowJs": true,
-    "noEmit": true
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "htmx": [
+        "pkg/htmx/htmx"
+      ],
+      "goaty": [
+        "pkg/goaty/goaty"
+      ]
+    }
   },
-  "baseUrl": ".",
   "include": [
     "./**/*.js",
     "./**/*.ts"

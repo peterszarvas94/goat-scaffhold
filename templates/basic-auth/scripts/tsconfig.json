@@ -2,9 +2,14 @@
   "compilerOptions": {
     "checkJs": true,
     "allowJs": true,
-    "noEmit": true
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "htmx": [
+        "pkg/htmx/htmx"
+      ]
+    }
   },
-  "baseUrl": ".",
   "include": [
     "./**/*.js",
     "./**/*.ts"

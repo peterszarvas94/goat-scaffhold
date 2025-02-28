@@ -4,12 +4,16 @@
     "allowJs": true,
     "noEmit": true,
     "baseUrl": ".",
+    "lib": [
+      "esnext",
+      "dom"
+    ],
     "paths": {
-      "htmx": [
-        "pkg/htmx/htmx"
+      "htmx.org": [
+        "pkg/htmx.org@2.0.4.js"
       ],
-      "goaty": [
-        "pkg/goaty/goaty"
+      "htmx-ext-head-support": [
+        "pkg/htmx-ext-head-support@2.0.4.js"
       ]
     }
   },

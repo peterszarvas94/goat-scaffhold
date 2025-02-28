@@ -1,6 +1,10 @@
 package components
 
-templ Head(page string) {
+import (
+	"fmt"
+)
+
+templ Head(title string) {
 	<!DOCTYPE html>
 	<head>
 		<!--meta-->
@@ -9,18 +13,17 @@ templ Head(page string) {
 		<meta name="description" content="Page description here"/>
 		<meta name="keywords" content="keywords, related, to, page"/>
 		<meta name="author" content="Author Name"/>
-		<title>scaffhold</title>
+		<title>{ fmt.Sprintf("%s - scaffhold", title) }</title>
 		<!--js-->
 		<script type="importmap">
 			{
 				"imports": {
-					"goaty": "/scripts/pkg/goaty/goaty.js"
+					"htmx.org": "/scripts/pkg/htmx.org@2.0.4.js",
+					"htmx-ext-head-support": "/scripts/pkg/htmx-ext-head-support@2.0.4.js"
 				}
 			}	
 		</script>
-		<script src="/scripts/pkg/htmx/htmx.js"></script>
-		<script src="/scripts/pkg/htmx/ext/head-support.js"></script>
-		<script src="/scripts/src/htmx-extensions.js" type="module"></script>
+		<script src="/scripts/main.js" type="module"></script>
 		<!--css-->
 		<link rel="stylesheet" href="/styles/simple.css"/>
 		<link rel="stylesheet" href="/styles/global.css"/>

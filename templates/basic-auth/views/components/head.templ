@@ -14,13 +14,19 @@ templ Head(title string) {
 		<meta name="keywords" content="keywords, related, to, page"/>
 		<meta name="author" content="Author Name"/>
 		<title>{ fmt.Sprintf("%s - scaffhold", title) }</title>
-		<!--js-->
-		<script src="/scripts/pkg/htmx/htmx.js"></script>
-		<script src="/scripts/pkg/htmx/ext/response-targets.js"></script>
-		<script src="/scripts/pkg/htmx/ext/head-support.js"></script>
-		<script src="/scripts/src/htmx-extensions.js"></script>
+		<!--js -->
+		<script type="importmap">
+			{
+				"imports": {
+					"htmx.org": "/scripts/pkg/htmx.org@2.0.4.js",
+					"htmx-ext-head-support": "/scripts/pkg/htmx-ext-head-support@2.0.4.js",
+					"htmx-ext-response-targets": "/scripts/pkg/htmx-ext-response-targets@2.0.3.js"
+				}
+			}	
+		</script>
+		<script src="/scripts/main.js" type="module"></script>
 		<!--css-->
-		<link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"/>
+		<link rel="stylesheet" href="/styles/simple.css"/>
 		<link rel="stylesheet" href="/styles/global.css"/>
 	</head>
 }

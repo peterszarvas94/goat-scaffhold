@@ -2,6 +2,7 @@ package components
 
 import (
 	"fmt"
+	"github.com/peterszarvas94/goat/importmap"
 )
 
 templ Head(title string) {
@@ -15,15 +16,7 @@ templ Head(title string) {
 		<meta name="author" content="Author Name"/>
 		<title>{ fmt.Sprintf("%s - scaffhold", title) }</title>
 		<!--js -->
-		<script type="importmap">
-			{
-				"imports": {
-					"htmx.org": "/scripts/pkg/htmx.org@2.0.4.js",
-					"htmx-ext-head-support": "/scripts/pkg/htmx-ext-head-support@2.0.4.js",
-					"htmx-ext-response-targets": "/scripts/pkg/htmx-ext-response-targets@2.0.3.js"
-				}
-			}	
-		</script>
+		@importmap.ScriptTag()
 		<script src="/scripts/main.js" type="module"></script>
 		<!--css-->
 		<link rel="stylesheet" href="/styles/simple.css"/>

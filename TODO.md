@@ -13,4 +13,5 @@
 - [ ] profile page to change name / email / password
 - [ ] better styling
 - [x] fix js with import map
-  - [ ] generate tsconfig and importmap from goat package
+  - [x] generate importmap
+  - [ ] generate tsconfig paths

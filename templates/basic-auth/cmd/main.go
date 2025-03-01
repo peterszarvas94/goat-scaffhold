@@ -34,12 +34,11 @@ func main() {
 	}
 
 	// set up scripts
-	imports := map[string]string{
-		"htmx.org":                  "/scripts/pkg/htmx.org@2.0.4.js",
-		"htmx-ext-head-support":     "/scripts/pkg/htmx-ext-head-support@2.0.4.js",
-		"htmx-ext-response-targets": "/scripts/pkg/htmx-ext-response-targets@2.0.3.js",
+	err = importmap.Setup()
+	if err != nil {
+		logger.Error(err.Error())
+		os.Exit(1)
 	}
-	importmap.Setup(imports)
 
 	// set up db
 	db, err := database.Connect(config.Vars.DbPath)
@@ -65,10 +64,7 @@ func main() {
 
 	router := server.NewRouter()
 
-	router.Favicon("favicon.ico")
-
-	router.Static("/scripts/", "./scripts")
-	router.Static("/styles/", "./styles")
+	router.Setup()
 
 	router.Use(Cache, AddRequestID, AddAuthState)
 

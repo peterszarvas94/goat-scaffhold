@@ -6,7 +6,7 @@ import (
 	"scaffhold/config"
 	. "scaffhold/controllers/middlewares"
 	"scaffhold/controllers/pages"
-	"scaffhold/views/components"
+	"scaffhold/controllers/procedures"
 	pageViews "scaffhold/views/pages"
 
 	"github.com/peterszarvas94/goat/env"
@@ -30,27 +30,22 @@ func main() {
 	}
 
 	// set up scripts
-	imports := map[string]string{
-		"htmx.org":              "/scripts/pkg/htmx.org@2.0.4.js",
-		"htmx-ext-head-support": "/scripts/pkg/htmx-ext-head-support@2.0.4.js",
-	}
-	importmap.Setup(imports)
+	importmap.Setup()
 
 	// set up server
 	url := server.NewLocalHostUrl(config.Vars.Port)
 
 	router := server.NewRouter()
 
-	router.Favicon("favicon.ico")
-
-	router.Static("/scripts/", "./scripts")
-	router.Static("/styles/", "./styles")
+	router.Setup()
 
 	router.Use(Cache, AddReqID)
 
 	router.TemplGet("/", pageViews.NotFound())
 	router.Get("/{$}", pages.Index)
-	router.TemplGet("/ping", components.Pong())
+	router.Get("/count", procedures.GetCount)
+	router.Post("/count", procedures.PostCount)
+	// router.TemplGet("/ping", components.Pong())
 
 	s := server.NewServer(router, url)
 

@@ -1,0 +1,23 @@
+{
+	"compilerOptions": {
+		"checkJs": true,
+		"allowJs": true,
+		"noEmit": true,
+		"lib": [
+			"esnext",
+			"dom"
+		],
+		"baseUrl": "./",
+		"paths": {
+			"htmx-ext-head-support": [
+				"scripts/pkg/htmx-ext-head-support@2.0.4.js"
+			],
+			"htmx.org": [
+				"scripts/pkg/htmx.org@2.0.4.js"
+			]
+		}
+	},
+	"include": [
+		"./**/*.js"
+	]
+}

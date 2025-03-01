@@ -12,4 +12,6 @@
 - [ ] email verification
 - [ ] profile page to change name / email / password
 - [ ] better styling
-- [ ] fix js with import map + node_module sync? or idk check rails
+- [x] fix js with import map
+  - [x] generate importmap -> use external json file for config
+  - [ ] generate tsconfig paths -> use tsconfig's "extends" key to include?

@@ -6,10 +6,11 @@ import (
 	"scaffhold/config"
 	. "scaffhold/controllers/middlewares"
 	"scaffhold/controllers/pages"
-	"scaffhold/views/components"
+	"scaffhold/controllers/procedures"
 	pageViews "scaffhold/views/pages"
 
 	"github.com/peterszarvas94/goat/env"
+	"github.com/peterszarvas94/goat/importmap"
 	"github.com/peterszarvas94/goat/logger"
 	"github.com/peterszarvas94/goat/server"
 	"github.com/peterszarvas94/goat/uuid"
@@ -28,21 +29,23 @@ func main() {
 		os.Exit(1)
 	}
 
+	// set up scripts
+	importmap.Setup()
+
 	// set up server
 	url := server.NewLocalHostUrl(config.Vars.Port)
 
 	router := server.NewRouter()
 
-	router.Favicon("favicon.ico")
-
-	router.Static("/scripts/", "./scripts")
-	router.Static("/styles/", "./styles")
+	router.Setup()
 
 	router.Use(Cache, AddReqID)
 
 	router.TemplGet("/", pageViews.NotFound())
 	router.Get("/{$}", pages.Index)
-	router.TemplGet("/ping", components.Pong())
+	router.Get("/count", procedures.GetCount)
+	router.Post("/count", procedures.PostCount)
+	// router.TemplGet("/ping", components.Pong())
 
 	s := server.NewServer(router, url)
 

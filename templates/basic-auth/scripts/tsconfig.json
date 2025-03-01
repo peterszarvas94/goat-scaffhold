@@ -2,9 +2,24 @@
   "compilerOptions": {
     "checkJs": true,
     "allowJs": true,
-    "noEmit": true
+    "noEmit": true,
+    "baseUrl": ".",
+    "lib": [
+      "esnext",
+      "dom"
+    ],
+    "paths": {
+      "htmx.org": [
+        "pkg/htmx.org@2.0.4.js"
+      ],
+      "htmx-ext-head-support": [
+        "pkg/htmx-ext-head-support@2.0.4.js"
+      ],
+      "htmx-ext-response-targets": [
+        "pkg/htmx-ext-response-targets@2.0.3.js"
+      ]
+    }
   },
-  "baseUrl": ".",
   "include": [
     "./**/*.js",
     "./**/*.ts"

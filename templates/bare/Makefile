@@ -5,15 +5,15 @@ ifneq (,$(wildcard ./.env))
 endif
 
 ifndef DBPATH
-  $(error DBPATH is not set in the environment)
+	$(error DBPATH is not set in the environment)
 endif
 
 ifndef PORT
-  $(error PORT is not set in the environment)
+	$(error PORT is not set in the environment)
 endif
 
 ifndef GOATENV 
-  $(error GOATENV is not set in the environment)
+	$(error GOATENV is not set in the environment)
 endif
 
 # dev serve

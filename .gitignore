@@ -9,3 +9,6 @@ templates/**/go.work
 templates/**/go.work.sum
 templates/**/scripts/node_modules
 templates/**/tmp/
+templates/**/temp/
+templates/**/.DS_Store/
+

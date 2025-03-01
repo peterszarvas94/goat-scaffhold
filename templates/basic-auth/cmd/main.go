@@ -14,6 +14,7 @@ import (
 	"github.com/peterszarvas94/goat/csrf"
 	"github.com/peterszarvas94/goat/database"
 	"github.com/peterszarvas94/goat/env"
+	"github.com/peterszarvas94/goat/importmap"
 	"github.com/peterszarvas94/goat/logger"
 	"github.com/peterszarvas94/goat/server"
 	"github.com/peterszarvas94/goat/uuid"
@@ -29,6 +30,13 @@ func main() {
 	// set up env vars
 	err = env.Load(&config.Vars)
 	if err != nil {
+		os.Exit(1)
+	}
+
+	// set up scripts
+	err = importmap.Setup()
+	if err != nil {
+		logger.Error(err.Error())
 		os.Exit(1)
 	}
 
@@ -56,10 +64,7 @@ func main() {
 
 	router := server.NewRouter()
 
-	router.Favicon("favicon.ico")
-
-	router.Static("/scripts/", "./scripts")
-	router.Static("/styles/", "./styles")
+	router.Setup()
 
 	router.Use(Cache, AddRequestID, AddAuthState)
 

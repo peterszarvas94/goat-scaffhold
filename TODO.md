@@ -13,5 +13,5 @@
 - [ ] profile page to change name / email / password
 - [ ] better styling
 - [x] fix js with import map
-  - [x] generate importmap -> use external json file for config
-  - [ ] generate tsconfig paths -> use tsconfig's "extends" key to include?
+    - [x] generate importmap -> use external json file for config
+    - [x] generate tsconfig paths -> use tsconfig's "extends" key to include?

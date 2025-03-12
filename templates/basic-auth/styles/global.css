@@ -1,5 +1,45 @@
 body {
-  max-width: 500px;
-  width: 100%;
-  margin: 0 auto;
+	max-width: 750px;
+	width: 100%;
+	margin: 0 auto;
+	background-color: var(--page-bg);
+	color: var(--page-text);
+}
+
+h1 {
+	display: flex;
+	padding: var(--space);
+	justify-content: center;
+	align-items: center;
+	font-size: 2rem;
+}
+
+h2 {
+	display: flex;
+	padding: 0 0 var(--space) 0;
+	justify-content: center;
+	align-items: center;
+	font-size: 1.5rem;
+}
+
+.main-grid {
+	display: grid;
+	grid-template-columns: 1fr 2fr;
+	gap: calc(var(--space) * 2);
+	padding: calc(var(--space) * 2);
+}
+
+.full-width {
+	flex-grow: 1;
+}
+
+.popover {
+	p {
+		padding-bottom: var(--space);
+	}
+
+	.buttons {
+		display: flex;
+		justify-content: right;
+	}
 }

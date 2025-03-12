@@ -30,7 +30,10 @@ func main() {
 	}
 
 	// set up scripts
-	importmap.Setup()
+	err = importmap.Setup()
+	if err != nil {
+		os.Exit(1)
+	}
 
 	// set up server
 	url := server.NewLocalHostUrl(config.Vars.Port)

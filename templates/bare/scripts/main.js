@@ -1,5 +1,4 @@
 import htmx from "htmx.org";
-import "htmx-ext-head-support";
 
 htmx.logAll();
 

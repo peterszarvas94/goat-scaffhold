@@ -7,38 +7,28 @@ import (
 
 templ Login() {
 	@layouts.Page("Login") {
-		<style type="text/css">
-			#login {
-				form {
-					display: flex;
-					flex-direction: column;
-					gap: 1rem;
-
-					div {
-						display: flex;
-						flex-direction: column;
-					}
-
-					button {
-						width: 100%;
-					}
-				}
-			}
-		</style>
+		@components.PageTitle()
 		<section id="login">
 			<h2>Log in</h2>
-			<form hx-post="/login" hx-target-error="#login-error">
+			<form
+				style="display: flex; flex-direction: column; gap: 1rem;"
+				hx-post="/login"
+				hx-target-error="#login-error"
+			>
 				@components.EmailInput()
 				@components.PasswordInput()
-				<button type="submit">Submit</button>
+				<div style="display: flex; justify-content: space-between; align-items: end;">
+					<button class="goat-btn" type="submit">Submit</button>
+					<a
+						href="/register"
+						hx-boost="true"
+						style="text-decoration: underline;"
+					>
+						Register instead
+					</a>
+				</div>
 			</form>
-			<p id="login-error"></p>
-			<a
-				href="/register"
-				hx-boost="true"
-			>
-				Register instead
-			</a>
+			<p style="padding: 1rem 0; color: var(--danger);" id="login-error"></p>
 		</section>
 	}
 }

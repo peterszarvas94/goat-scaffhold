@@ -1,6 +1,6 @@
 [build]
 bin = "tmp/bin/server"
-cmd = "rm -rf tmp && go build -o tmp/bin/server ./cmd/main.go"
+cmd = "go build -o tmp/bin/server ./cmd/main.go"
 include_ext = ["go"]
 exclude_dir = ["db/sql", "db/migrations", "logs", "scripts"]
 delay = 100

@@ -2,6 +2,6 @@
 	"imports": {
 		"htmx.org": "/scripts/pkg/htmx.org@2.0.4.js",
 		"htmx-ext-head-support": "/scripts/pkg/htmx-ext-head-support@2.0.4.js",
-		"htmx-ext-response-targets": "/scripts/pkg/htmx-ext-response-targets@2.0.3.js"
+		"goat-ui": "/scripts/pkg/goat-ui@0.0.1.js"
 	}
 }

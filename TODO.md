@@ -8,10 +8,13 @@
 - [x] req_id to each request, also log it, and save to db (e.g. login -> save req_id to session)
 - [x] csrf protection to post
 - [x] change helpers to goat exported ones
+- [x] fix js with import map
+    - [x] generate importmap -> use external json file for config
+    - [x] generate tsconfig paths -> use tsconfig's "extends" key to include?
+- [x] goat ui
+    - [x] dont use window.x = x, instead make event listeners for data attributes
+- [x] better styling
 - [ ] updated_at
 - [ ] email verification
 - [ ] profile page to change name / email / password
-- [ ] better styling
-- [x] fix js with import map
-  - [x] generate importmap -> use external json file for config
-  - [ ] generate tsconfig paths -> use tsconfig's "extends" key to include?
+- [ ] add google / github auth tepmlate

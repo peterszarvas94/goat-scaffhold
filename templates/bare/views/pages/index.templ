@@ -4,14 +4,29 @@ import (
 	"fmt"
 	"scaffhold/config"
 	"scaffhold/views/layouts"
+	"github.com/peterszarvas94/goat/ui"
 )
 
 templ Index() {
 	@layouts.Page("index") {
 		<h1>{ fmt.Sprintf("Welcome to %s", config.AppName) }</h1>
 	}
-	<button hx-post="/count" hx-target="#counter">Count</button>
-	<div style="display: flex; justify-content: center; font-size: 2rem;">
-		<div id="counter" hx-get="/count" hx-trigger="load"></div>
-	</div>
+	@ui.FlexCol(ui.FlexColProps{}) {
+		@ui.FlexRow(ui.FlexRowProps{
+			Class: "center",
+		}) {
+			@ui.ThemeSelector(ui.ThemeSelectorProps{})
+			@ui.Button(ui.ButtonProps{
+				Attributes: templ.Attributes{
+					"hx-post":   "/count",
+					"hx-target": "#counter",
+				},
+			}) {
+				Count
+			}
+		}
+		<div style="display: flex; justify-content: center; font-size: 2rem;">
+			<div id="counter" hx-get="/count" hx-trigger="load"></div>
+		</div>
+	}
 }

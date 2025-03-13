@@ -12,11 +12,13 @@ function selectTheme(value) {
 	setAttribut(value);
 	setSelection(value);
 }
+window.selectTheme = selectTheme;
 
 /** @param {string} value */
 function setAttribut(value) {
 	document.body.setAttribute("data-theme", value);
 }
+window.setAttribut = setAttribut;
 
 /** @param {string} value */
 function setSelection(value) {
@@ -25,6 +27,7 @@ function setSelection(value) {
 		element.value = value;
 	});
 }
+window.setSelection = setSelection;
 
 /* PASSWORD2 */
 const passwordElements = document.querySelectorAll(".goat-password2");

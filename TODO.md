@@ -1,5 +1,7 @@
 # TODO
 
+## GENERAL
+
 - [x] config port != live reload templ port
 - [x] no plaintext passwords
 - [x] session timeout
@@ -14,7 +16,17 @@
 - [x] goat ui
     - [x] dont use window.x = x, instead make event listeners for data attributes
 - [x] better styling
+
+## BARE
+
+- no tasks
+
+## BASIC AUTH
+
 - [ ] updated_at
 - [ ] email verification
 - [ ] profile page to change name / email / password
+
+## OAUTH
+
 - [ ] add google / github auth tepmlate

@@ -17,9 +17,8 @@ templ Head(title string) {
 		<title>{ fmt.Sprintf("%s - scaffhold", title) }</title>
 		<!--js -->
 		@importmap.ScriptTag()
-		<script src="/scripts/main.js" type="module"></script>
+		<script src="/scripts/init.js" type="module"></script>
 		<!--css-->
-		<link rel="stylesheet" href="/styles/simple.css"/>
-		<link rel="stylesheet" href="/styles/global.css"/>
+		<link rel="stylesheet" href="/styles/init.css"/>
 	</head>
 }

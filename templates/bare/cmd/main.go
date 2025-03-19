@@ -30,7 +30,10 @@ func main() {
 	}
 
 	// set up scripts
-	importmap.Setup()
+	err = importmap.Setup()
+	if err != nil {
+		os.Exit(1)
+	}
 
 	// set up server
 	url := server.NewLocalHostUrl(config.Vars.Port)
@@ -45,7 +48,6 @@ func main() {
 	router.Get("/{$}", pages.Index)
 	router.Get("/count", procedures.GetCount)
 	router.Post("/count", procedures.PostCount)
-	// router.TemplGet("/ping", components.Pong())
 
 	s := server.NewServer(router, url)
 

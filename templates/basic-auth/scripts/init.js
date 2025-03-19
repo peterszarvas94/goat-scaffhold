@@ -1,7 +1,9 @@
 import htmx from "htmx.org";
 import "htmx-ext-head-support";
+import "htmx-ext-response-targets";
+import "goat-ui";
 
-htmx.logAll();
+// htmx.logAll();
 
 /** @type {Partial<import("htmx.org").HtmxExtension>} */
 const swapAll = {
@@ -14,3 +16,4 @@ const swapAll = {
 };
 
 htmx.defineExtension("swap-all", swapAll);
+

@@ -1,29 +1,29 @@
 package pages
 
 import (
-	"scaffhold/views/components"
-	"scaffhold/views/layouts"
+	. "scaffhold/views/components"
 	"scaffhold/db/models"
 )
 
 type IndexProps struct {
-	UserinfoProps *components.UserinfoProps
-	PostformProps *components.PostformProps
+	UserinfoProps *UserinfoProps
+	PostformProps *PostformProps
 	Posts         []models.Post
 }
 
 templ Index(props *IndexProps) {
-	@layouts.Page("index") {
-		@components.PageTitle()
+	@Head("index", []string{}, []string{})
+	@Page() {
+		@PageTitle()
 		<div style="display: flex; flex-direction: column; gap: 1rem;">
 			if props.UserinfoProps != nil && props.PostformProps != nil {
-				@components.Userinfo(*props.UserinfoProps)
-				@components.Postform(*props.PostformProps)
+				@Userinfo(*props.UserinfoProps)
+				@Postform(*props.PostformProps)
 				<section>
 					<h2>Posts</h2>
 					<ul id="posts">
 						for _, post := range props.Posts {
-							@components.Post(&post)
+							@Post(&post)
 						}
 					</ul>
 				</section>

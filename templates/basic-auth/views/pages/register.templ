@@ -1,13 +1,13 @@
 package pages 
 
 import (
-	"scaffhold/views/layouts"
-	"scaffhold/views/components"
+	. "scaffhold/views/components"
 )
 
 templ Register() {
-	@layouts.Page("register") {
-		@components.PageTitle()
+	@Head("register", []string{}, []string{})
+	@Page() {
+		@PageTitle()
 		<section id="register">
 			<h2>Register</h2>
 			<form
@@ -15,9 +15,9 @@ templ Register() {
 				hx-post="/register"
 				hx-target-error="#register-error"
 			>
-				@components.NameInput()
-				@components.EmailInput()
-				@components.PasswordInput()
+				@NameInput()
+				@EmailInput()
+				@PasswordInput()
 				<div style="display: flex; justify-content: space-between; align-items: end;">
 					<button class="goat-btn" type="submit">Submit</button>
 					<a

@@ -1,5 +1,12 @@
 package pages
 
+import (
+	. "scaffhold/views/components"
+)
+
 templ NotFound() {
-	<div>404 not found :(</div>
+	@Head("notfound", []string{}, []string{})
+	@Page() {
+		<div>404 not found :(</div>
+	}
 }

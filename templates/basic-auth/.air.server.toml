@@ -2,6 +2,6 @@
 bin = "tmp/bin/server"
 cmd = "go build -o tmp/bin/server ./cmd/main.go"
 include_ext = ["go"]
-exclude_dir = ["db/sql", "db/migrations", "logs", "scripts"]
+exclude_dir = ["db/sql", "db/migrations", "logs", "assets"]
 delay = 100
 send_interrupt = true

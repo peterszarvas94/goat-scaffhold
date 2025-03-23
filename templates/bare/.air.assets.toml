@@ -2,5 +2,6 @@
 bin = ""
 cmd = "templ generate --notify-proxy"
 delay = 100
-include_dir = ["scripts", "styles"]
-include_ext = ["js", "css"]
+include_dir = ["assets"]
+include_ext = ["js", "css", "json"]
+exclude_dir = []

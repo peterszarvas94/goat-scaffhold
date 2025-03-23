@@ -2,10 +2,11 @@ package components
 
 import (
 	"fmt"
+
 	"github.com/peterszarvas94/goat/importmap"
 )
 
-templ Head(title string) {
+templ Head(title string, scripts []string, styles []string) {
 	<!DOCTYPE html>
 	<head>
 		<!--meta-->
@@ -15,10 +16,21 @@ templ Head(title string) {
 		<meta name="keywords" content="keywords, related, to, page"/>
 		<meta name="author" content="Author Name"/>
 		<title>{ fmt.Sprintf("%s - scaffhold", title) }</title>
-		<!--js -->
+		<!--js-->
+		<!-- definition in the importmap.json -->
 		@importmap.ScriptTag()
-		<script src="/scripts/init.js" type="module"></script>
+		<!-- loaded for every route -->
+		@UserScript("global.js")
+		<!-- page-specific scripts -->
+		for _, script := range scripts {
+			@UserScript(script)
+		}
 		<!--css-->
-		<link rel="stylesheet" href="/styles/init.css"/>
+		<!-- loaded for every route -->
+		@UserStyle("global.css")
+		<!-- page-specific styles -->
+		for _, style := range styles {
+			@UserStyle(style)
+		}
 	</head>
 }

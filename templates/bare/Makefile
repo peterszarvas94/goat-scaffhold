@@ -27,8 +27,9 @@ dev/assets:
 	air -c .air.assets.toml
 
 dev:
-	rm -rf tmp
-	make -j3 dev/templ dev/server dev/assets
+	rm -rf tmp && \
+	templ generate && \
+	make -j3 dev/server dev/templ dev/assets
 
 # dump db
 dump:

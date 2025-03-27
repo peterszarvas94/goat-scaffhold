@@ -2,10 +2,16 @@ package pages
 
 import (
 	. "scaffhold/views/components"
+	"github.com/peterszarvas94/goat/components"
 )
 
 templ Index() {
-	@Head("index", []string{}, []string{})
+	@components.Head(components.HeadProps{
+		Title:       "scaffhold",
+		Description: "The greatest webpage of all time",
+		Author:      "Peter Szarvas",
+		Keywords:    []string{"goat", "go", "templ", "htmx"},
+	})
 	@Page() {
 		@PageTitle()
 		<div style="display: flex; flex-direction: column; gap: 1rem; align-items: center;">

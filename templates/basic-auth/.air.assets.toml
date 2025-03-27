@@ -1,5 +1,9 @@
 [build]
-bin = ""
+bin = "tmp/bin/fake"
+pre_cmd = [
+    "printf '#!/bin/sh\nexit 0\n' > tmp/bin/fake",
+    "chmod +x tmp/bin/fake"
+]
 cmd = "templ generate --notify-proxy"
 delay = 100
 include_dir = ["assets"]

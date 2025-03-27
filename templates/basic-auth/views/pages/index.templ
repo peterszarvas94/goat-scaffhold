@@ -3,6 +3,7 @@ package pages
 import (
 	. "scaffhold/views/components"
 	"scaffhold/db/models"
+	"github.com/peterszarvas94/goat/components"
 )
 
 type IndexProps struct {
@@ -12,7 +13,12 @@ type IndexProps struct {
 }
 
 templ Index(props *IndexProps) {
-	@Head("index", []string{}, []string{})
+	@components.Head(components.HeadProps{
+		Title:       "scaffhold",
+		Description: "The greatest webpage of all time",
+		Author:      "Peter Szarvas",
+		Keywords:    []string{"goat", "go", "templ", "htmx"},
+	})
 	@Page() {
 		@PageTitle()
 		<div style="display: flex; flex-direction: column; gap: 1rem;">

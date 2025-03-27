@@ -2,10 +2,16 @@ package pages
 
 import (
 	. "scaffhold/views/components"
+	"github.com/peterszarvas94/goat/components"
 )
 
 templ Register() {
-	@Head("register", []string{}, []string{})
+	@components.Head(components.HeadProps{
+		Title:       "scaffhold - login",
+		Description: "Log in to scaffhold",
+		Author:      "Peter Szarvas",
+		Keywords:    []string{"goat", "go", "templ", "htmx"},
+	})
 	@Page() {
 		@PageTitle()
 		<section id="register">

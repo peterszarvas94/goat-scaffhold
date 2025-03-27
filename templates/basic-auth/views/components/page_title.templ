@@ -3,7 +3,7 @@ package components
 import "scaffhold/config"
 
 templ PageTitle() {
-	<a href="/">
+	<a href="/" hx-boost="true">
 		<h1>{ config.AppName }</h1>
 	</a>
 	<div style="display: flex; justify-content: center; padding-bottom: 4rem;">

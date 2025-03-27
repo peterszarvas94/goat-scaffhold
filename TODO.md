@@ -16,6 +16,8 @@
 - [x] goat ui
     - [x] dont use window.x = x, instead make event listeners for data attributes
 - [x] better styling
+- [ ] page based scripts
+- [ ] page based css
 
 ## BARE
 

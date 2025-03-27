@@ -1,3 +1,7 @@
+@import "../pkg/preflight.css";
+@import "../pkg/goat-ui@0.0.1/light/light.css";
+@import "../pkg/goat-ui@0.0.1/dark/dark.css";
+
 body {
 	background-color: var(--page-bg);
 	color: var(--page-text);

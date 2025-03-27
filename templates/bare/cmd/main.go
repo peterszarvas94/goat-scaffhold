@@ -7,7 +7,6 @@ import (
 	. "scaffhold/controllers/middlewares"
 	"scaffhold/controllers/pages"
 	"scaffhold/controllers/procedures"
-	pageViews "scaffhold/views/pages"
 
 	"github.com/peterszarvas94/goat/env"
 	"github.com/peterszarvas94/goat/importmap"
@@ -44,7 +43,7 @@ func main() {
 
 	router.Use(Cache, AddReqID)
 
-	router.TemplGet("/", pageViews.NotFound())
+	router.Get("/", pages.NotFound)
 	router.Get("/{$}", pages.Index)
 	router.Get("/count", procedures.GetCount)
 	router.Post("/count", procedures.PostCount)

@@ -2,7 +2,6 @@ package procedures
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 
 	"github.com/peterszarvas94/goat/ctx"
@@ -19,6 +18,5 @@ func PostCount(w http.ResponseWriter, r *http.Request) {
 	count++
 
 	logger.Debug("Count increased", "req_id", *reqID)
-	w.Header().Set("Content-Type", "text/html")
-	w.Write(fmt.Appendf([]byte{}, "%d", count))
+	GetCount(w, r)
 }

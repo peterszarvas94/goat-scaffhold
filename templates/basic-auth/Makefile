@@ -1,4 +1,4 @@
-# Load environment variables from .env file
+#a Load environment variables from .env file
 ifneq (,$(wildcard ./.env))
 	include .env
 	export
@@ -18,16 +18,18 @@ endif
 
 # dev serve
 dev/templ:
-	templ generate --watch --proxy="http://localhost:$(PORT)" --open-browser=false -v
+	templ generate --watch --proxy="http://localhost:$(PORT)" --open-browser=false
 
 dev/server:
+	sleep 1 && \
 	air -c .air.server.toml
 
 dev/assets:
+	sleep 2 && \
 	air -c .air.assets.toml
 
 dev:
-	rm -rf tmp
+	rm -rf tmp && \
 	make -j3 dev/templ dev/server dev/assets
 
 # dump db
